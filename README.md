@@ -12,3 +12,4 @@ conversion and manipulation of tabular data
 2. Install required package
 
       - openpyxl
+      - pytest
