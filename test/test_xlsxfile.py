@@ -27,3 +27,9 @@ def test_get_columns(test_xlsx):
     my_col = test_xlsx.get_columns()
     assert len(my_col) == 8
 
+
+def test_create_empty_file():
+    test_filename = os.path.join(UNIT_TEST_PATH_OUTPUT, "test_empty.xlsx")
+    xlsx = rustre.xlsxfile.XlsxFile.create_file(test_filename)
+    assert os.path.exists(test_filename)
+

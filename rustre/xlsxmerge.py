@@ -18,6 +18,8 @@ class XlsxMerge:
     ####################################################################################################
     def __init__(self, source_files):
         self.m_source_files = source_files
+        if source_files is None or len(source_files) == 0:
+            raise ValueError("No source files")
 
     ####################################################################################################
     # @brief Merge the files into the result filename
@@ -31,8 +33,25 @@ class XlsxMerge:
                 logging.error("Xlsx files are not similar!")
                 return False
 
+        # merge first file in the new filename
+        XlsxFile.create_file(result_file)
+        if not os.path.exists(result_file):
+            logging.error("Unable to create: {}".format(result_file))
+            return False
+        xlsx_result = XlsxFile(result_file)
+        xlsx_source1 = XlsxFile(self.m_source_files[0])
+        m_row_tot = xlsx_source1.get_row_count()
+        for r in range(1, m_row_tot+1):
+            my_row = xlsx_source1.get_columns(r)
+            xlsx_result.append_row(my_row)
 
-
+        # merge the other files
+        for index in range(1, len(self.m_source_files)):
+            xlsx_src = XlsxFile(self.m_source_files[index])
+            for r in range(2, xlsx_src.get_row_count()+1):
+                my_row = xlsx_src.get_columns(r)
+                xlsx_result.append_row(my_row)
+        xlsx_result.save()
         return True
 
 
