@@ -51,6 +51,7 @@ coverage.xml
 .hypothesis/
 .pytest_cache/
 unit_test_output
+_local
 
 # Translations
 *.mo

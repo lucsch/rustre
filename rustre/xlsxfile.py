@@ -14,15 +14,16 @@ class XlsxFile:
 
     ####################################################################################################
     # @brief Open a xlsx file
-    #   @param[in] filename:
+    #   @param[in] filename xlsx filename
+    #   @param[in] sheet_number sheet number (default is 0)
     ####################################################################################################
-    def __init__(self, filename):
+    def __init__(self, filename, sheet_number=0):
         self.m_filename = filename
         if not os.path.exists(self.m_filename):
             raise ValueError("File: {} didn't exist!".format(self.m_filename))
 
         self.m_wb = load_workbook(self.m_filename)
-        self.m_sheet = self.m_wb.worksheets[0]
+        self.m_sheet = self.m_wb.worksheets[sheet_number]
         self.m_total_row = self.m_sheet.max_row
         self.m_total_col = self.m_sheet.max_column
 

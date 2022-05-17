@@ -17,11 +17,11 @@ class XlsxCompare:
     #    @param[in] file1  First file (xlsx only)
     #    @param[in] file2  Second file (xlsx only)
     ####################################################################################################
-    def __init__(self, file1, file2):
+    def __init__(self, file1, file2, sheet_index1=0, sheet_index2=0):
         self.m_file1 = file1
         self.m_file2 = file2
-        self.m_xlsx1 = XlsxFile(self.m_file1)
-        self.m_xlsx2 = XlsxFile(self.m_file2)
+        self.m_xlsx1 = XlsxFile(self.m_file1, sheet_index1)
+        self.m_xlsx2 = XlsxFile(self.m_file2, sheet_index2)
 
     ####################################################################################################
     # @brief Compare headers in two files
@@ -37,6 +37,8 @@ class XlsxCompare:
             logging.error("no columns in file: {}".format(self.m_file2))
         if my_cols1 == my_cols2:
             return True
+        logging.error("Columns {}: {}".format(self.m_file1, my_cols1))
+        logging.error("Columns {}: {}".format(self.m_file2, my_cols2))
         return False
 
 

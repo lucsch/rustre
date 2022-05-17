@@ -16,8 +16,9 @@ class XlsxMerge:
     # @brief Init XlsxMerge object
     #   @param[in] source_files  list of xlsx filenames
     ####################################################################################################
-    def __init__(self, source_files):
+    def __init__(self, source_files, sheet_index=0):
         self.m_source_files = source_files
+        self.m_sheet_index = sheet_index
         if source_files is None or len(source_files) == 0:
             raise ValueError("No source files")
 
@@ -28,7 +29,7 @@ class XlsxMerge:
     def merge(self, result_file):
         # compare headers
         for index in range(1, len(self.m_source_files)):
-            xcomp = XlsxCompare(self.m_source_files[0], self.m_source_files[index])
+            xcomp = XlsxCompare(self.m_source_files[0], self.m_source_files[index], self.m_sheet_index, self.m_sheet_index)
             if not xcomp.compare_headers(1, 1):
                 logging.error("Xlsx files are not similar!")
                 return False
@@ -39,7 +40,7 @@ class XlsxMerge:
             logging.error("Unable to create: {}".format(result_file))
             return False
         xlsx_result = XlsxFile(result_file)
-        xlsx_source1 = XlsxFile(self.m_source_files[0])
+        xlsx_source1 = XlsxFile(self.m_source_files[0], self.m_sheet_index)
         m_row_tot = xlsx_source1.get_row_count()
         for r in range(1, m_row_tot+1):
             my_row = xlsx_source1.get_columns(r)
@@ -47,7 +48,7 @@ class XlsxMerge:
 
         # merge the other files
         for index in range(1, len(self.m_source_files)):
-            xlsx_src = XlsxFile(self.m_source_files[index])
+            xlsx_src = XlsxFile(self.m_source_files[index], self.m_sheet_index)
             for r in range(2, xlsx_src.get_row_count()+1):
                 my_row = xlsx_src.get_columns(r)
                 xlsx_result.append_row(my_row)
