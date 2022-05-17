@@ -20,7 +20,7 @@ if __name__ == '__main__':
     # print(xlsx.get_columns(1))
     # exit()
 
-    xmrg = XlsxMerge(filenames, sheet_index=1)
+    xmrg = XlsxMerge(filenames, sheet_index=0, header_index=7)
     res_file = os.path.expanduser("~/result.xlsx")
     xmrg.merge(res_file)
     print("export done in: '{}'".format(res_file))
