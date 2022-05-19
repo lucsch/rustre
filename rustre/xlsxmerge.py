@@ -2,7 +2,6 @@
 import logging
 import os.path
 from rustre.xlsxfile import XlsxFile
-from rustre.xlsxcompare import XlsxCompare
 
 
 ####################################################################################################
@@ -31,10 +30,15 @@ class XlsxMerge:
     ####################################################################################################
     def merge(self, result_file):
         # compare headers
+        xlsx1 = XlsxFile(self.m_source_files[0], self.m_sheet_index)
+        header_xlsx1 = xlsx1.get_columns(self.m_header_index)
         for index in range(1, len(self.m_source_files)):
-            xcomp = XlsxCompare(self.m_source_files[0], self.m_source_files[index], self.m_sheet_index, self.m_sheet_index)
-            if not xcomp.compare_headers(self.m_header_index, self.m_header_index):
-                logging.error("Xlsx files are not similar!")
+            xlsx2 = XlsxFile(self.m_source_files[index], self.m_sheet_index)
+            header_xlsx2 = xlsx2.get_columns(self.m_header_index)
+            if header_xlsx1 != header_xlsx2:
+                logging.error("Xlsx headers are not equal")
+                logging.error("Header1 : {}".format(header_xlsx1))
+                logging.error("Header2 : {}".format(header_xlsx2))
                 return False
 
         # merge first file in the new filename
