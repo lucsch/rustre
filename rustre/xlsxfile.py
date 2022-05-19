@@ -59,3 +59,6 @@ class XlsxFile:
 
     def save(self):
         self.m_wb.save(self.m_filename)
+
+    def change_value(self, col, row, new_value):
+        self.m_sheet.cell(row, col).value = new_value

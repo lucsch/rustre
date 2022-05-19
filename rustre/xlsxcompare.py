@@ -72,15 +72,43 @@ class XlsxCompare:
                 row_write = row_target.copy()
                 row_write.append("SKIPPED")
                 xlsx_result.append_row(row_write)
+                continue
 
             # iterate all row in source file
-            row_status = None
+            row_found = False
             for src_row_index in range(2, xlsx_src.get_row_count()+1):
                 row_src = xlsx_src.get_columns(src_row_index)
+                id_src = self._get_id(row_src, conf_src)
+                if id_src == id_target:
+                    row_found = True
+
+                    # check if row has changed
+                    if row_src[conf_src.m_col_compare] != row_target[conf_target.m_col_compare]:
+                        # modify the src
+                        xlsx_src.change_value(conf_src.m_col_compare+1,
+                                              src_row_index,
+                                              row_target[conf_target.m_col_compare])
+
+                        # add the status to the log
+                        row_write = row_target.copy()
+                        row_write.append("CHANGED")
+                        xlsx_result.append_row(row_write)
+                        break
+
+            # target row isn't found in src... add it
+            if not row_found:
+                # add row to the src
+                row_target_formated = self._get_target_formated_row(row_target, conf_target)
+                xlsx_src.append_row(row_target_formated)
+
+                # add row to the log
+                row_write = row_target.copy()
+                row_write.append("ADDED")
+                xlsx_result.append_row(row_write)
 
         xlsx_result.save()
+        xlsx_src.save()
         return True
-
 
     def _skip_row(self, row_target, conf_target):
         # check if target row must be skipped
@@ -89,12 +117,21 @@ class XlsxCompare:
                 return True
         return False
 
-
     def _get_id(self, row, conf):
         my_id = ""
         for col_index in conf.m_id_cols:
             my_id += str(row[col_index])
         return my_id
+
+    def _has_row_changed(self, row_src, row_target, conf_src, conf_target):
+        if row_src[conf_src.m_col_compare] == row_target[conf_target.m_col_compare]:
+            return False
+        return True
+
+    def _get_target_formated_row(self, row_target, conf_target):
+        order_list = [row_target[i] for i in conf_target.m_col_order]
+        return order_list
+
 
 
 
