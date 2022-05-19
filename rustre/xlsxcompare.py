@@ -1,7 +1,32 @@
 #!/usr/bin/env python3
+import json
 import logging
-import configparser
+from configparser import ConfigParser
 from rustre.xlsxfile import XlsxFile
+
+
+class Config:
+    def __init__(self, header, config_file):
+        conf = ConfigParser()
+        conf.read(config_file)
+        conf.sections()
+        self.m_id_cols = conf.get(header, "id_col").split(",")
+        self.m_id_cols = [int(i) for i in self.m_id_cols]
+        self.m_skip_col = conf[header]["skip_col"]
+        self.m_skip_col_value = conf[header]["skip_col_value"]
+        self.m_col_compare = conf[header]["col_compare"]
+        self.m_col_order = conf[header]["col_order"].split(",")
+        self.m_col_order = [int(i) for i in self.m_col_order]
+        if self.m_skip_col == '':
+            self.m_skip_col = None
+        else:
+            self.m_skip_col = int(self.m_skip_col)
+        if self.m_skip_col_value == '':
+            self.m_skip_col_value = None
+        if self.m_col_compare != '':
+            self.m_col_compare = int(self.m_col_compare)
+
+
 
 ####################################################################################################
 # @brief Compare two xlsx files
@@ -24,7 +49,56 @@ class XlsxCompare:
 
     def do_compare(self, log_file):
         # open the config file
-        pass
+        conf_src = Config("SOURCE", self.m_config_file)
+        conf_target = Config("TARGET", self.m_config_file)
+        xlsx_src = XlsxFile(self.m_file_source, sheet_number=0)
+        xlsx_target = XlsxFile(self.m_file_target, sheet_number=0)
+
+        # create result log file
+        XlsxFile.create_file(log_file)
+        xlsx_result = XlsxFile(log_file)
+        result_header = xlsx_target.get_columns(1).copy()
+        result_header.append("STATUS")
+        xlsx_result.append_row(result_header)
+
+        # iterate all row in target file
+        for target_row_index in range(2, xlsx_target.get_row_count()+1):
+            row_target = xlsx_target.get_columns(target_row_index)
+            id_target = self._get_id(row_target, conf_target)
+            print(id_target)
+
+            # do we need to skip this row ?
+            if self._skip_row(row_target, conf_target):
+                row_write = row_target.copy()
+                row_write.append("SKIPPED")
+                xlsx_result.append_row(row_write)
+
+            # iterate all row in source file
+            row_status = None
+            for src_row_index in range(2, xlsx_src.get_row_count()+1):
+                row_src = xlsx_src.get_columns(src_row_index)
+
+        xlsx_result.save()
+        return True
+
+
+    def _skip_row(self, row_target, conf_target):
+        # check if target row must be skipped
+        if conf_target.m_skip_col is not None:
+            if row_target[conf_target.m_skip_col] == conf_target.m_skip_col_value:
+                return True
+        return False
+
+
+    def _get_id(self, row, conf):
+        my_id = ""
+        for col_index in conf.m_id_cols:
+            my_id += str(row[col_index])
+        return my_id
+
+
+
+
 
 
 
