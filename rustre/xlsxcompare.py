@@ -4,6 +4,10 @@ import logging
 from configparser import ConfigParser
 from rustre.xlsxfile import XlsxFile
 
+######################################################################################################
+# @brief Object storing configuration
+######################################################################################################
+
 
 class Config:
     def __init__(self, header, config_file):
@@ -48,6 +52,13 @@ class XlsxCompare:
         self.m_file_target = file_target
 
     def do_compare(self, log_file):
+        """
+        Compare source with target and modify source based on the data model defined in Config
+        :param log_file: xlsx file for saving a log file
+        :type log_file: str
+        :return: True or False
+        :rtype: bool
+        """
         # open the config file
         conf_src = Config("SOURCE", self.m_config_file)
         conf_target = Config("TARGET", self.m_config_file)
@@ -65,7 +76,6 @@ class XlsxCompare:
         for target_row_index in range(2, xlsx_target.get_row_count()+1):
             row_target = xlsx_target.get_columns(target_row_index)
             id_target = self._get_id(row_target, conf_target)
-            print(id_target)
 
             # do we need to skip this row ?
             if self._skip_row(row_target, conf_target):
@@ -131,6 +141,7 @@ class XlsxCompare:
     def _get_target_formated_row(self, row_target, conf_target):
         order_list = [row_target[i] for i in conf_target.m_col_order]
         return order_list
+
 
 
 
