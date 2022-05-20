@@ -5,3 +5,4 @@ myst-parser
 sphinx_rtd_theme
 pytest-cov
 coveralls
+wxPython

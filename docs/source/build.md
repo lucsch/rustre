@@ -15,6 +15,7 @@
 
    - openpyxl
    - pytest
+   - wxPython (GUI)
    - pytest-cov (code coverage)
    - coveralls (only needed to upload code coverage to coveralls.io)
    - sphinx (only needed for building the documentation)
