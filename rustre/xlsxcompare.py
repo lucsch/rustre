@@ -135,14 +135,3 @@ class XlsxCompare:
     def _get_target_formated_row(self, row_target, conf_target):
         order_list = [row_target[i] for i in conf_target.m_col_order]
         return order_list
-
-
-
-
-
-
-
-
-
-
-
