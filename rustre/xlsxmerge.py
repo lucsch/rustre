@@ -33,7 +33,7 @@ class XlsxMerge:
 
             :param result_file: the result filename (xlsx file)
             :type result_file: str
-            :return: True if the merge is sucessfull, False otherwise
+            :return: True if the merge is successful, False otherwise
             :rtype: bool
         """
         # compare headers
