@@ -9,7 +9,11 @@
 
 3. Install required package  
 
-        pip install -r requirements.txt`
+        pip install -r requirements.txt
+
+:::{Warning}
+Use `pip install -r requirements_linux.txt` on Linux
+:::
 
   The required libraries are the following:
 
@@ -17,6 +21,7 @@
    - pytest
    - wxPython (GUI)
    - pytest-cov (code coverage)
+   - flake8 (linting)
    - coveralls (only needed to upload code coverage to coveralls.io)
    - sphinx (only needed for building the documentation)
    - myst-parser (markdown support for sphinx)

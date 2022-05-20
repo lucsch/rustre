@@ -3,8 +3,8 @@ import wx
 
 class FrameMain(wx.Dialog):
 
-    def __init__(self, parent):
-        wx.Dialog.__init__(self, parent, id=wx.ID_ANY, title=wx.EmptyString, pos=wx.DefaultPosition,
+    def __init__(self):
+        wx.Dialog.__init__(self, None, id=wx.ID_ANY, title=wx.EmptyString, pos=wx.DefaultPosition,
                            size=wx.DefaultSize, style=wx.DEFAULT_DIALOG_STYLE | wx.RESIZE_BORDER)
         self._create_controls()
 

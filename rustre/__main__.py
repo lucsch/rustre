@@ -11,7 +11,7 @@ class RustreApp(wx.App):
     """
 
     def OnInit(self):
-        dlg = FrameMain(None)
+        dlg = FrameMain()
         dlg.Show(True)
         self.SetTopWindow(dlg)
         return True
