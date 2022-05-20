@@ -26,12 +26,12 @@ jobs:
 
     - name: Code coverage
       run: |
-        pytest --cov=rustre --cov-report xml
+        pytest --cov=rustre
     
     - name: Coveralls
-      uses: coverallsapp/github-action@master
-      with:
-        github-token: ${{ secrets.GITHUB_TOKEN }}
-        path-to-lcov: coverage.xml
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        coveralls --service=github
 
 
