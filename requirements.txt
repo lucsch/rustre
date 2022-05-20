@@ -3,3 +3,4 @@ pytest
 sphinx
 myst-parser
 sphinx_rtd_theme
+pytest-cov
