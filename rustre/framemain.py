@@ -1,7 +1,7 @@
 import wx
 
 
-class FrameMain(wx.Dialog):
+class FrameMain(wx.Dialog):  # pragma: no cover
 
     def __init__(self):
         wx.Dialog.__init__(self, None, id=wx.ID_ANY, title=wx.EmptyString, pos=wx.DefaultPosition,
@@ -10,9 +10,27 @@ class FrameMain(wx.Dialog):
 
         # bind events
         self.Bind(wx.EVT_CLOSE, self.on_close)
+        self.Bind(wx.EVT_BUTTON, self.on_button_paste, id=self.m_btn_paste.GetId())
+        self.Bind(wx.EVT_BUTTON, self.on_button_clear, id=self.m_btn_clear.GetId())
 
     def on_close(self, event):
         self.Destroy()
+
+    def on_button_paste(self, event):
+        if not wx.TheClipboard.IsOpened():
+            do = wx.FileDataObject()
+            wx.TheClipboard.Open()
+            success = wx.TheClipboard.GetData(do)
+            wx.TheClipboard.Close()
+            if success:
+                self.m_ctrl_list.Clear()
+                for f in do.GetFilenames():
+                    self.m_ctrl_list.Append(f)
+            else:
+                wx.MessageBox("""There is no data in the clipboard in the required format""")
+
+    def on_button_clear(self, event):
+        self.m_ctrl_list.Clear()
 
     def _create_controls(self):
         self.SetSizeHints(wx.DefaultSize, wx.DefaultSize)
