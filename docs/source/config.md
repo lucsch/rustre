@@ -9,7 +9,9 @@ Two identical groups must be present:
 - source `[SOURCE]` describe the xlsx source file structure. 
 - target `[TARGET]` describe the xlsx target file structure.
 
-> **_NOTE:_**  The source file is the reference. Only this file can be modified according to the values found in the target file
+:::{Note}  
+The source file is the reference. Only this file can be modified according to the values found in the target file
+:::
 
 ## Values
 
@@ -23,7 +25,10 @@ For each group, the following values are required:
 | col_compare    | number | The comparison column between source and target files                                                     | `col_compare = 4`       |
 | col_order      | list   | The order of the columns so that those in the target file match those in the source file                  | `col_order = 0,1,7,8`   |
 
-> **_NOTE:_** An example of a complete configuration file is available in `test/data/test_compare.ini`.
+
+:::{Note} 
+An example of a complete configuration file is available in `test/data/test_compare.ini`.
+:::
 
 
 

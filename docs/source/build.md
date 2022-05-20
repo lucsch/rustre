@@ -12,3 +12,4 @@ Building the application
  - pytest
  - sphinx (only needed for building the documentation)
  - myst-parser (markdown support for sphinx)
+ - sphinx_rtd_theme (read the doc sphinx theme)
