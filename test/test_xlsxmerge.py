@@ -40,3 +40,9 @@ def test_merge_output_path_didnt_exist(get_test_files):
     out_file = os.path.join(UNIT_TEST_PATH_OUTPUT, "NOT_EXISTING_PATH", "test_merge2.xlsx")
     assert xmerge.merge(out_file) is False
 
+
+def test_init_failed_wrong_format(get_test_files):
+    wrong_file = os.path.join(UNIT_TEST_PATH, "test_compare.ini")
+    with pytest.raises(ValueError):
+        xmerge = rustre.xlsxmerge.XlsxMerge([get_test_files[0], wrong_file, get_test_files[1]])
+

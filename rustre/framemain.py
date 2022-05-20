@@ -12,6 +12,7 @@ class FrameMain(wx.Dialog):  # pragma: no cover
         self.Bind(wx.EVT_CLOSE, self.on_close)
         self.Bind(wx.EVT_BUTTON, self.on_button_paste, id=self.m_btn_paste.GetId())
         self.Bind(wx.EVT_BUTTON, self.on_button_clear, id=self.m_btn_clear.GetId())
+        self.Bind(wx.EVT_BUTTON, self.on_button_merge, id=self.m_btn_do_merge.GetId())
 
     def on_close(self, event):
         self.Destroy()
@@ -31,6 +32,9 @@ class FrameMain(wx.Dialog):  # pragma: no cover
 
     def on_button_clear(self, event):
         self.m_ctrl_list.Clear()
+
+    def on_button_merge(self, event):
+
 
     def _create_controls(self):
         self.SetSizeHints(wx.DefaultSize, wx.DefaultSize)

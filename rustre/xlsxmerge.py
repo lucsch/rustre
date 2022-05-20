@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 import logging
+from pathlib import Path
 from rustre.xlsxfile import XlsxFile
 
 
@@ -23,6 +24,9 @@ class XlsxMerge:
         self.m_header_index = header_index
         if source_files is None or len(source_files) == 0:
             raise ValueError("No source files")
+        for f in source_files:
+            if Path(f).suffix != ".xlsx":
+                raise ValueError("Wrong extension found")
 
     def merge(self, result_file):
         """Merge the files into the result file
