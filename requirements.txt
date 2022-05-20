@@ -1,0 +1,4 @@
+openpyxl
+pytest
+sphinx
+myst-parser

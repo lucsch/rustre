@@ -4,13 +4,17 @@ import logging
 from configparser import ConfigParser
 from rustre.xlsxfile import XlsxFile
 
-######################################################################################################
-# @brief Object storing configuration
-######################################################################################################
-
 
 class Config:
+    """Parse and store config values found in the ".ini" file
+
+        :param header: the header group name (either SOURCE or TARGET)
+        :type header: str
+        :param config_file: the filename of the ini file
+        :type config_file: str
+    """
     def __init__(self, header, config_file):
+        """ Contructor """
         conf = ConfigParser()
         conf.read(config_file)
         conf.sections()
@@ -31,33 +35,30 @@ class Config:
             self.m_col_compare = int(self.m_col_compare)
 
 
-
-####################################################################################################
-# @brief Compare two xlsx files
-####################################################################################################
-
-
 class XlsxCompare:
-    """Compare two xlsx"""
+    """Compare two xlsx files
 
-    ####################################################################################################
-    # @brief Init the XlsxCompare object
-    #    @param[in] config_file  config file (ini)
-    #    @param[in] file_source  source file (xlsx)
-    #    @param[in] file_target  target file (xlsx)
-    ####################################################################################################
+        :param config_file: the filepath of the config file (.ini)
+        :type config_file: str
+        :param file_source: the xslx source filename
+        :type file_source: str
+        :param file_target: the xlsx target filename
+        :type file_target: str
+    """
+
     def __init__(self, config_file, file_source, file_target):
+        """ Constructor"""
         self.m_config_file = config_file
         self.m_file_source = file_source
         self.m_file_target = file_target
 
     def do_compare(self, log_file):
-        """
-        Compare source with target and modify source based on the data model defined in Config
-        :param log_file: xlsx file for saving a log file
-        :type log_file: str
-        :return: True or False
-        :rtype: bool
+        """Compare source with target and modify source based on the data model defined in Config
+
+            :param log_file: xlsx file for saving a log file
+            :type log_file: str
+            :return: True or False
+            :rtype: bool
         """
         # open the config file
         conf_src = Config("SOURCE", self.m_config_file)
