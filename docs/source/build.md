@@ -1,15 +1,36 @@
-Building the application
-=================================
+# Building
 
-1. Create a virtual environnement::
+1. Clone the repository from https://github.com/lucsch/rustre
+
+2. Create a virtual environnement::
 
         python3 -m venv venv
         source venv/bin/activate
 
-2. Install required package
+3. Install required package  
 
- - openpyxl
- - pytest
- - sphinx (only needed for building the documentation)
- - myst-parser (markdown support for sphinx)
- - sphinx_rtd_theme (read the doc sphinx theme)
+        pip install -r requirements.txt`
+
+  The required libraries are the following:
+
+   - openpyxl
+   - pytest
+   - sphinx (only needed for building the documentation)
+   - myst-parser (markdown support for sphinx)
+   - sphinx_rtd_theme (read the doc sphinx theme)
+
+:::{Note}
+If you do not plan to build the documentation, the last three libraries are not needed
+:::
+
+## Building the tests
+
+      pytest test --log-cli-level=INFO
+
+## Building the documentation
+
+in the `RUSTRE/docs` folder run the following command:
+
+      make html
+
+

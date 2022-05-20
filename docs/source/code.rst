@@ -1,4 +1,4 @@
-Documentation for the code
+Code documentation
 *****************************
 
 Rustre (engine)
