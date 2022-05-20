@@ -34,14 +34,12 @@ class XlsxFile:
             :return: Nothing
         """
         wb = Workbook()
-        page = wb.active
         try:
             wb.save(filename)
         except FileNotFoundError:
             logging.error("Unable to create: '{}'".format(filename))
             return False
         return True
-
 
     def get_columns(self, row_number=1):
         """Return all column values by row number
