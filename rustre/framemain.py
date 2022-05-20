@@ -1,10 +1,11 @@
 import wx
+from rustre.xlsxmerge import XlsxMerge
 
 
 class FrameMain(wx.Dialog):  # pragma: no cover
 
     def __init__(self):
-        wx.Dialog.__init__(self, None, id=wx.ID_ANY, title=wx.EmptyString, pos=wx.DefaultPosition,
+        wx.Dialog.__init__(self, None, id=wx.ID_ANY, title="RUSTRE", pos=wx.DefaultPosition,
                            size=wx.DefaultSize, style=wx.DEFAULT_DIALOG_STYLE | wx.RESIZE_BORDER)
         self._create_controls()
 
@@ -34,7 +35,15 @@ class FrameMain(wx.Dialog):  # pragma: no cover
         self.m_ctrl_list.Clear()
 
     def on_button_merge(self, event):
-
+        try:
+            xmerge = XlsxMerge(self.m_ctrl_list.GetItems(), self.m_ctrl_sheet.GetValue(), self.m_ctrl_header.GetValue())
+        except ValueError:
+            wx.LogError("Error merging files, check your data!")
+            return
+        if not xmerge.merge(self.m_ctrl_result.GetPath()):
+            wx.LogError("Merging failed!")
+            return
+        wx.LogMessage("Merging done!")
 
     def _create_controls(self):
         self.SetSizeHints(wx.DefaultSize, wx.DefaultSize)
@@ -80,9 +89,9 @@ class FrameMain(wx.Dialog):  # pragma: no cover
 
         fgSizer1.Add(self.m_staticText1, 0, wx.ALL | wx.ALIGN_CENTER_VERTICAL, 5)
 
-        self.m_ctrl_sheed = wx.SpinCtrl(sbSizer2.GetStaticBox(), wx.ID_ANY, wx.EmptyString, wx.DefaultPosition,
+        self.m_ctrl_sheet = wx.SpinCtrl(sbSizer2.GetStaticBox(), wx.ID_ANY, wx.EmptyString, wx.DefaultPosition,
                                         wx.DefaultSize, wx.SP_ARROW_KEYS, 0, 20, 0)
-        fgSizer1.Add(self.m_ctrl_sheed, 0, wx.ALL | wx.ALIGN_CENTER_VERTICAL | wx.EXPAND, 5)
+        fgSizer1.Add(self.m_ctrl_sheet, 0, wx.ALL | wx.ALIGN_CENTER_VERTICAL | wx.EXPAND, 5)
 
         self.m_staticText2 = wx.StaticText(sbSizer2.GetStaticBox(), wx.ID_ANY, u"header index (start at 1):",
                                            wx.DefaultPosition, wx.DefaultSize, 0)
