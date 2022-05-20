@@ -1,6 +1,6 @@
 # Building
 
-1. Clone the repository from https://github.com/lucsch/rustre
+1. Clone the repository from [github](https://github.com/lucsch/rustre)
 
 2. Create a virtual environnement::
 

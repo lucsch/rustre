@@ -134,11 +134,6 @@ class XlsxCompare:
             my_id += str(row[col_index])
         return my_id
 
-    def _has_row_changed(self, row_src, row_target, conf_src, conf_target):
-        if row_src[conf_src.m_col_compare] == row_target[conf_target.m_col_compare]:
-            return False
-        return True
-
     def _get_target_formated_row(self, row_target, conf_target):
         order_list = [row_target[i] for i in conf_target.m_col_order]
         return order_list

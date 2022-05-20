@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+import logging
 import os.path
 
 from openpyxl import load_workbook
@@ -34,7 +35,13 @@ class XlsxFile:
         """
         wb = Workbook()
         page = wb.active
-        wb.save(filename)
+        try:
+            wb.save(filename)
+        except FileNotFoundError:
+            logging.error("Unable to create: '{}'".format(filename))
+            return False
+        return True
+
 
     def get_columns(self, row_number=1):
         """Return all column values by row number

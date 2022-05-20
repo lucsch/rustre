@@ -25,11 +25,14 @@ class XlsxMerge:
         if source_files is None or len(source_files) == 0:
             raise ValueError("No source files")
 
-    ####################################################################################################
-    # @brief Merge the files into the result filename
-    #    @param[out] result_file  xlsx output filename
-    ####################################################################################################
     def merge(self, result_file):
+        """Merge the files into the result file
+
+            :param result_file: the result filename (xlsx file)
+            :type result_file: str
+            :return: True if the merge is sucessfull, False otherwise
+            :rtype: bool
+        """
         # compare headers
         xlsx1 = XlsxFile(self.m_source_files[0], self.m_sheet_index)
         header_xlsx1 = xlsx1.get_columns(self.m_header_index)
@@ -43,10 +46,9 @@ class XlsxMerge:
                 return False
 
         # merge first file in the new filename
-        XlsxFile.create_file(result_file)
-        if not os.path.exists(result_file):
-            logging.error("Unable to create: {}".format(result_file))
+        if not XlsxFile.create_file(result_file):
             return False
+
         xlsx_result = XlsxFile(result_file)
         xlsx_source1 = XlsxFile(self.m_source_files[0], self.m_sheet_index)
         m_row_tot = xlsx_source1.get_row_count()
