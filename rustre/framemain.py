@@ -2,21 +2,18 @@ import wx
 from rustre.xlsxmerge import XlsxMerge
 
 
-class FrameMain(wx.Dialog):  # pragma: no cover
+class FrameMain(wx.Frame):  # pragma: no cover
 
     def __init__(self):
-        wx.Dialog.__init__(self, None, id=wx.ID_ANY, title="RUSTRE", pos=wx.DefaultPosition,
-                           size=wx.DefaultSize, style=wx.DEFAULT_DIALOG_STYLE | wx.RESIZE_BORDER)
+        wx.Frame.__init__(self, None, id=wx.ID_ANY, title="RUSTRE", pos=wx.DefaultPosition,
+                          size=wx.DefaultSize, style=wx.DEFAULT_DIALOG_STYLE | wx.RESIZE_BORDER)
         self._create_controls()
+        self._create_statusbar()
 
         # bind events
-        self.Bind(wx.EVT_CLOSE, self.on_close)
         self.Bind(wx.EVT_BUTTON, self.on_button_paste, id=self.m_btn_paste.GetId())
         self.Bind(wx.EVT_BUTTON, self.on_button_clear, id=self.m_btn_clear.GetId())
         self.Bind(wx.EVT_BUTTON, self.on_button_merge, id=self.m_btn_do_merge.GetId())
-
-    def on_close(self, event):
-        self.Destroy()
 
     def on_button_paste(self, event):
         if not wx.TheClipboard.IsOpened():
@@ -44,6 +41,9 @@ class FrameMain(wx.Dialog):  # pragma: no cover
             wx.LogError("Merging failed!")
             return
         wx.LogMessage("Merging done!")
+
+    def _create_statusbar(self):
+        self.CreateStatusBar()
 
     def _create_controls(self):
         self.SetSizeHints(wx.DefaultSize, wx.DefaultSize)
