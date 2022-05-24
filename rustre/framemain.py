@@ -1,3 +1,5 @@
+import pathlib
+
 import wx
 from rustre.xlsxmerge import XlsxMerge
 
@@ -37,7 +39,12 @@ class FrameMain(wx.Frame):  # pragma: no cover
         except ValueError:
             wx.LogError("Error merging files, check your data!")
             return
-        if not xmerge.merge(self.m_ctrl_result.GetPath()):
+        # add xlsx extension if not present
+        result_filename = self.m_ctrl_result.GetPath()
+        if pathlib.Path(result_filename).suffix != ".xlsx":
+            result_filename += ".xlsx"
+
+        if not xmerge.merge(result_filename):
             wx.LogError("Merging failed!")
             return
         wx.LogMessage("Merging done!")
