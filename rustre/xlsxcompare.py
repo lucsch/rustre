@@ -12,14 +12,14 @@ class Config:
         :type config_file: str
     """
     def __init__(self, header, config_file):
-        """ Contructor """
+        """ Constructor """
         conf = ConfigParser()
         conf.read(config_file)
         conf.sections()
         self.m_id_cols = conf.get(header, "id_col").split(",")
         self.m_id_cols = [int(i) for i in self.m_id_cols]
         self.m_skip_col = conf[header]["skip_col"]
-        self.m_skip_col_value = conf[header]["skip_col_value"]
+        self.m_skip_col_values = conf[header]["skip_col_values"]
         self.m_col_compare = conf[header]["col_compare"]
         self.m_col_order = conf[header]["col_order"].split(",")
         self.m_col_order = [int(i) for i in self.m_col_order]
@@ -27,10 +27,16 @@ class Config:
             self.m_skip_col = None
         else:
             self.m_skip_col = int(self.m_skip_col)
-        if self.m_skip_col_value == '':
-            self.m_skip_col_value = None
+        if self.m_skip_col_values == '':
+            self.m_skip_col_values = None
         if self.m_col_compare != '':
             self.m_col_compare = int(self.m_col_compare)
+
+    def get_row_id(self, row):
+        id_row = []
+        for index in self.m_id_cols:
+            id_row.append(row[index])
+        return id_row
 
 
 class XlsxCompare:
@@ -67,7 +73,7 @@ class XlsxCompare:
         # create result log file
         XlsxFile.create_file(log_file)
         xlsx_result = XlsxFile(log_file)
-        result_header = self._get_id_row(xlsx_target.get_columns(1), conf_target)
+        result_header = conf_target.get_row_id(xlsx_target.get_columns(1))
         result_header.append("STATUS")
         xlsx_result.append_row(result_header)
 
@@ -78,7 +84,7 @@ class XlsxCompare:
 
             # do we need to skip this row ?
             if self._skip_row(row_target, conf_target):
-                row_write = self._get_id_row(row_target, conf_target)
+                row_write = conf_target.get_row_id(row_target)
                 row_write.append("SKIPPED")
                 xlsx_result.append_row(row_write)
                 continue
@@ -99,7 +105,7 @@ class XlsxCompare:
                                               row_target[conf_target.m_col_compare])
 
                         # add the status to the log
-                        row_write = self._get_id_row(row_target, conf_target)
+                        row_write = conf_target.get_row_id(row_target)
                         row_write.append("CHANGED")
                         xlsx_result.append_row(row_write)
                         break
@@ -111,7 +117,7 @@ class XlsxCompare:
                 xlsx_src.append_row(row_target_formated)
 
                 # add row to the log
-                row_write = self._get_id_row(row_target, conf_target)
+                row_write = conf_target.get_row_id(row_target)
                 row_write.append("ADDED")
                 xlsx_result.append_row(row_write)
 
@@ -122,7 +128,7 @@ class XlsxCompare:
     def _skip_row(self, row_target, conf_target):
         # check if target row must be skipped
         if conf_target.m_skip_col is not None:
-            if row_target[conf_target.m_skip_col] == conf_target.m_skip_col_value:
+            if row_target[conf_target.m_skip_col] == conf_target.m_skip_col_values:
                 return True
         return False
 
@@ -136,8 +142,4 @@ class XlsxCompare:
         order_list = [row_target[i] for i in conf_target.m_col_order]
         return order_list
 
-    def _get_id_row(self, row_target, conf_target):
-        id_row = []
-        for index in conf_target.m_id_cols:
-            id_row.append(row_target[index])
-        return id_row
+
