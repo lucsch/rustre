@@ -35,7 +35,26 @@ def test_compare(get_src_filename, get_config_file, get_target_filename):
     xcomp = rustre.xlsxcompare.XlsxCompare(get_config_file, get_src_filename, get_target_filename)
     assert xcomp.do_compare(os.path.join(UNIT_TEST_PATH_OUTPUT, "compare_log1.xlsx"))
 
+@pytest.fixture(scope="module")
+def get_src_filename2():
+    src_filename = os.path.join(UNIT_TEST_PATH_OUTPUT, "test_src.xlsx")
+    shutil.copyfile(os.path.join(UNIT_TEST_PATH, "test_src.xlsx"), src_filename)
+    return src_filename
 
+
+@pytest.fixture(scope="module")
+def get_target_filename2():
+    return os.path.join(UNIT_TEST_PATH, "test_target.xlsx")
+
+
+@pytest.fixture(scope="module")
+def get_config_file2():
+    return os.path.join(UNIT_TEST_PATH, "test_compare2.ini")
+
+
+def test_compare2(get_src_filename2, get_config_file2, get_target_filename2):
+    xcomp = rustre.xlsxcompare.XlsxCompare(get_config_file2, get_src_filename2, get_target_filename2)
+    assert xcomp.do_compare(os.path.join(UNIT_TEST_PATH_OUTPUT, "compare_log2.xlsx"))
 
 
 

@@ -13,30 +13,39 @@ class Config:
     """
     def __init__(self, header, config_file):
         """ Constructor """
-        conf = ConfigParser()
-        conf.read(config_file)
-        conf.sections()
-        self.m_id_cols = conf.get(header, "id_col").split(",")
-        self.m_id_cols = [int(i) for i in self.m_id_cols]
-        self.m_skip_col = conf[header]["skip_col"]
-        self.m_skip_col_values = conf[header]["skip_col_values"]
-        self.m_col_compare = conf[header]["col_compare"]
-        self.m_col_order = conf[header]["col_order"].split(",")
-        self.m_col_order = [int(i) for i in self.m_col_order]
-        if self.m_skip_col == '':
-            self.m_skip_col = None
-        else:
-            self.m_skip_col = int(self.m_skip_col)
-        if self.m_skip_col_values == '':
-            self.m_skip_col_values = None
-        if self.m_col_compare != '':
-            self.m_col_compare = int(self.m_col_compare)
+        self.conf = ConfigParser()
+        self.conf.read(config_file)
+        self.conf.sections()
+        self.m_header = header
+        self.m_id_cols = self._as_list_comma("id_col")
+        self.m_skip_col = self.conf.getint(self.m_header, "skip_col")
+        self.m_skip_col_values = self._as_list_new_line("skip_col_values")
+        self.m_col_compare = self.conf.getint(self.m_header, "col_compare")
+        self.m_col_copy = self._as_list_comma("col_copy")
+
+    def _as_list_comma(self, config_value):
+        my_list = self.conf.get(self.m_header, config_value).split(",")
+        if my_list == ['']:
+            return None
+        return [int(i) for i in my_list]
+
+    def _as_list_new_line(self, config_value):
+        return self.conf.get(self.m_header, config_value).splitlines()
 
     def get_row_id(self, row):
         id_row = []
         for index in self.m_id_cols:
             id_row.append(row[index])
         return id_row
+
+    def do_skip_row(self, row):
+        # check if target row must be skipped
+        if self.m_skip_col is not None:
+            for val in self.m_skip_col_values:
+                if row[self.m_skip_col] == val:
+                    return True
+        return False
+
 
 
 class XlsxCompare:
