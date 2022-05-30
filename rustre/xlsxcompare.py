@@ -18,19 +18,25 @@ class Config:
         self.conf.sections()
         self.m_header = header
         self.m_id_cols = self._as_list_comma("id_col")
-        self.m_skip_col = self.conf.getint(self.m_header, "skip_col")
+        self.m_skip_col = self.conf.getint(self.m_header, "skip_col", fallback=None)
         self.m_skip_col_values = self._as_list_new_line("skip_col_values")
         self.m_col_compare = self.conf.getint(self.m_header, "col_compare")
         self.m_col_copy = self._as_list_comma("col_copy")
 
     def _as_list_comma(self, config_value):
-        my_list = self.conf.get(self.m_header, config_value).split(",")
+        my_list = self.conf.get(self.m_header, config_value, fallback=None)
+        if my_list is None:
+            return None
+        my_list = my_list.split(",")
         if my_list == ['']:
             return None
         return [int(i) for i in my_list]
 
     def _as_list_new_line(self, config_value):
-        return self.conf.get(self.m_header, config_value).splitlines()
+        my_list = self.conf.get(self.m_header, config_value, fallback=None)
+        if my_list is None:
+            return None
+        return my_list.splitlines()
 
     def get_row_id(self, row):
         id_row = []
@@ -45,7 +51,6 @@ class Config:
                 if row[self.m_skip_col] == val:
                     return True
         return False
-
 
 
 class XlsxCompare:
