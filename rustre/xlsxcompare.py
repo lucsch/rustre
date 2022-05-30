@@ -52,6 +52,18 @@ class Config:
                     return True
         return False
 
+    def do_col_copy(self, dest_list, col_order, row_data):
+        """
+        Copy all cols listed in col_copy into dest_list in the order specified by col_index
+        :param dest_list: A list for storing the copied cols
+        :param col_index: A list of cols order
+        :param row_data: The data to reorder
+        :return: the modified dest_list
+        """
+        for index, col_index in enumerate(self.m_col_copy):
+            dest_list[col_order[index]] = row_data[col_index]
+        return dest_list
+
 
 class XlsxCompare:
     """Compare two xlsx files
@@ -149,11 +161,24 @@ class XlsxCompare:
         self.m_xlsx_src.save()
         return True
 
-    def do_row_change(self, row, row_index):
-        pass
+    def do_row_change(self, row_target, src_index):
+        """
+        Called when the row has changed
+        :param row_target: the actual row value of the target
+        :param src_index: the index of the row to modify in the source file
+        :return:
+        """
+        self.m_xlsx_src.change_value(self.m_conf_src.m_col_compare+1, src_index,
+                                     row_target[self.m_conf_target.m_col_compare])
+        # TODO: Check if we need to modify all the columns or only the compare one...
+        # for example if the address has changed
 
-    def do_row_add(self, row):
-        pass
+    def do_row_add(self, row_target):
+        # create empty list
+        my_new_row = [None] * len(self.m_xlsx_src.get_columns(1))
+        my_new_row = self.m_conf_target.do_col_copy(my_new_row, self.m_conf_src.m_col_copy, row_target)
+        self.m_xlsx_src.append_row(my_new_row)
+
 
     def _get_target_formated_row(self, row_target, conf_target):
         order_list = [row_target[i] for i in conf_target.m_col_order]
