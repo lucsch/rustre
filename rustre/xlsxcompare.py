@@ -40,6 +40,21 @@ class ColCondition:
         return True
 
 
+class ColStripText:
+    def __init__(self, row):
+        self.m_col = -1
+        self.m_nb_char_to_strip = 0
+
+        if row is not None and row != "":
+            my_list = row.split(",")
+            self.m_col = int(my_list[0])
+            self.m_nb_char_to_strip = int(my_list[1])
+
+    def is_valid(self):
+        if self.m_col == -1 and self.m_nb_char_to_strip == 0:
+            return False
+        return True
+
 
 class Config:
     """Parse and store config values found in the ".ini" file
@@ -75,6 +90,14 @@ class Config:
                 col_cond = ColCondition(col)
                 if col_cond.is_valid():
                     self.m_col_condition.append(col_cond)
+
+        self.m_col_strip_text = []
+        my_strip_list = self._as_list_new_line("col_strip_text")
+        if my_strip_list is not None:
+            for row in my_strip_list:
+                col_strip = ColStripText(row)
+                if row is not None:
+                    self.m_col_strip_text.append(col_strip)
 
     def _as_list_comma(self, config_value):
         my_list = self.conf.get(self.m_header, config_value, fallback=None)
@@ -161,6 +184,16 @@ class Config:
                 dest_list[col_condition_obj[index].m_col_two] = col_condition_obj[index].m_value
             else:
                 dest_list[col_condition_obj[index].m_col_two] = row_data[cond_obj.m_col_one]
+        return dest_list
+
+    def do_col_strip_text(self, dest_list, col_strip_text_obj, row_data):
+        if col_strip_text_obj is None:
+            return dest_list
+        for index, strip_obj in enumerate(self.m_col_strip_text):
+            if not strip_obj.is_valid():
+                continue
+            text_striped = row_data[strip_obj.m_col][strip_obj.m_nb_char_to_strip:]
+            dest_list[col_strip_text_obj[index].m_col] = text_striped.strip()
         return dest_list
 
 
@@ -279,6 +312,8 @@ class XlsxCompare:
         my_new_row = self.m_conf_target.do_col_join(my_new_row, self.m_conf_src.m_col_join, row_target)
         my_new_row = self.m_conf_target.do_col_mapping(my_new_row, self.m_conf_src.m_col_mapping, row_target)
         my_new_row = self.m_conf_target.do_col_condition(my_new_row, self.m_conf_src.m_col_condition, row_target)
+        my_new_row = self.m_conf_target.do_col_strip_text(my_new_row, self.m_conf_src.m_col_strip_text, row_target)
+        print(my_new_row)
         self.m_xlsx_src.append_row(my_new_row)
 
     def _get_target_formated_row(self, row_target, conf_target):
