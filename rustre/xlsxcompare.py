@@ -267,9 +267,6 @@ class XlsxCompare:
                     if row_src[self.m_conf_src.m_col_compare] != row_target[self.m_conf_target.m_col_compare]:
                         # modify the src
                         self.do_row_change(row_target, src_row_index)
-                        # self.m_xlsx_src.change_value(conf_src.m_col_compare+1,
-                        #                       src_row_index,
-                        #                       row_target[self.m_conf_target.m_col_compare])
 
                         # add the status to the log
                         row_write = self.m_conf_target.get_row_id(row_target)
@@ -281,8 +278,6 @@ class XlsxCompare:
             if not row_found:
                 # add row to the src
                 self.do_row_add(row_target)
-                # row_target_formated = self._get_target_formated_row(row_target, self.m_conf_target)
-                # self.m_xlsx_src.append_row(row_target_formated)
 
                 # add row to the log
                 row_write = self.m_conf_target.get_row_id(row_target)
