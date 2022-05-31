@@ -42,10 +42,11 @@ class Config:
         self.m_col_join = self._as_list_of_list("col_join")
         self.m_col_mapping = []
         my_mapping_list = self._as_list_new_line("col_mapping")
-        for row in my_mapping_list:
-            col_map = ColMapping(row)
-            if col_map.is_valid_col():
-                self.m_col_mapping.append(col_map)
+        if my_mapping_list is not None:
+            for row in my_mapping_list:
+                col_map = ColMapping(row)
+                if col_map.is_valid_col():
+                    self.m_col_mapping.append(col_map)
 
 
     def _as_list_comma(self, config_value):
@@ -116,11 +117,12 @@ class Config:
         return dest_list
 
     def do_col_mapping(self, dest_list, col_mapping_obj, row_data):
+        if col_mapping_obj is None:
+            return dest_list
         for index, map_obj in enumerate(self.m_col_mapping):
             for val_index, val in enumerate(map_obj.m_values):
                 if val == str(row_data[map_obj.m_col]):
                     dest_list[col_mapping_obj[index].m_col] = col_mapping_obj[index].m_values[val_index]
-        print(dest_list)
         return dest_list
 
 
