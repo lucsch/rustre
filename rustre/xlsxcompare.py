@@ -20,6 +20,27 @@ class ColMapping:
         return False
 
 
+class ColCondition:
+    def __init__(self, row):
+        self.m_col_one = -1
+        self.m_value = None
+        self.m_col_two = -1
+
+        if row is not None and row != "":
+            my_list = row.split(",")
+            self.m_col_one = int(my_list[0])
+            self.m_value = str(my_list[1])
+            if self.m_value == "None":
+                self.m_value = None
+            self.m_col_two = int(my_list[2])
+
+    def is_valid(self):
+        if self.m_col_one == -1 and self.m_col_two == -1 and self.m_value is None:
+            return False
+        return True
+
+
+
 class Config:
     """Parse and store config values found in the ".ini" file
 
@@ -47,7 +68,13 @@ class Config:
                 col_map = ColMapping(row)
                 if col_map.is_valid_col():
                     self.m_col_mapping.append(col_map)
-
+        self.m_col_condition = []
+        my_conditions_list = self._as_list_new_line("col_condition")
+        if my_conditions_list is not None:
+            for col in my_conditions_list:
+                col_cond = ColCondition(col)
+                if col_cond.is_valid():
+                    self.m_col_condition.append(col_cond)
 
     def _as_list_comma(self, config_value):
         my_list = self.conf.get(self.m_header, config_value, fallback=None)
@@ -123,6 +150,17 @@ class Config:
             for val_index, val in enumerate(map_obj.m_values):
                 if val == str(row_data[map_obj.m_col]):
                     dest_list[col_mapping_obj[index].m_col] = col_mapping_obj[index].m_values[val_index]
+        return dest_list
+
+    def do_col_condition(self, dest_list, col_condition_obj, row_data):
+        if col_condition_obj is None:
+            return dest_list
+        for index, cond_obj in enumerate(self.m_col_condition):
+            if cond_obj.m_value in row_data[cond_obj.m_col_one]:
+                dest_list[col_condition_obj[index].m_col_one] = row_data[cond_obj.m_col_one]
+                dest_list[col_condition_obj[index].m_col_two] = col_condition_obj[index].m_value
+            else:
+                dest_list[col_condition_obj[index].m_col_two] = row_data[cond_obj.m_col_one]
         return dest_list
 
 
@@ -240,6 +278,7 @@ class XlsxCompare:
         my_new_row = self.m_conf_target.do_col_copy(my_new_row, self.m_conf_src.m_col_copy, row_target)
         my_new_row = self.m_conf_target.do_col_join(my_new_row, self.m_conf_src.m_col_join, row_target)
         my_new_row = self.m_conf_target.do_col_mapping(my_new_row, self.m_conf_src.m_col_mapping, row_target)
+        my_new_row = self.m_conf_target.do_col_condition(my_new_row, self.m_conf_src.m_col_condition, row_target)
         self.m_xlsx_src.append_row(my_new_row)
 
     def _get_target_formated_row(self, row_target, conf_target):
