@@ -3,6 +3,23 @@ from configparser import ConfigParser
 from rustre.xlsxfile import XlsxFile
 
 
+class ColMapping:
+    def __init__(self, row):
+        self.m_col = None
+        self.m_values = []
+
+        if row is not None and row != "":
+            my_list = row.split(",")
+            self.m_col = int(my_list[0])
+            for val in my_list[1:]:
+                self.m_values.append(val.replace(";", ","))
+
+    def is_valid_col(self):
+        if self.m_col is not None:
+            return True
+        return False
+
+
 class Config:
     """Parse and store config values found in the ".ini" file
 
@@ -23,6 +40,13 @@ class Config:
         self.m_col_compare = self.conf.getint(self.m_header, "col_compare")
         self.m_col_copy = self._as_list_comma("col_copy")
         self.m_col_join = self._as_list_of_list("col_join")
+        self.m_col_mapping = []
+        my_mapping_list = self._as_list_new_line("col_mapping")
+        for row in my_mapping_list:
+            col_map = ColMapping(row)
+            if col_map.is_valid_col():
+                self.m_col_mapping.append(col_map)
+
 
     def _as_list_comma(self, config_value):
         my_list = self.conf.get(self.m_header, config_value, fallback=None)
@@ -89,6 +113,14 @@ class Config:
             for index, col in enumerate(my_cols_int):
                 my_joined_value += str(row_data[col]) + " "
             dest_list[int(src_col)] = my_joined_value.rstrip()
+        return dest_list
+
+    def do_col_mapping(self, dest_list, col_mapping_obj, row_data):
+        for index, map_obj in enumerate(self.m_col_mapping):
+            for val_index, val in enumerate(map_obj.m_values):
+                if val == str(row_data[map_obj.m_col]):
+                    dest_list[col_mapping_obj[index].m_col] = col_mapping_obj[index].m_values[val_index]
+        print(dest_list)
         return dest_list
 
 
@@ -205,8 +237,8 @@ class XlsxCompare:
         my_new_row = [None] * len(self.m_xlsx_src.get_columns(1))
         my_new_row = self.m_conf_target.do_col_copy(my_new_row, self.m_conf_src.m_col_copy, row_target)
         my_new_row = self.m_conf_target.do_col_join(my_new_row, self.m_conf_src.m_col_join, row_target)
+        my_new_row = self.m_conf_target.do_col_mapping(my_new_row, self.m_conf_src.m_col_mapping, row_target)
         self.m_xlsx_src.append_row(my_new_row)
-
 
     def _get_target_formated_row(self, row_target, conf_target):
         order_list = [row_target[i] for i in conf_target.m_col_order]
