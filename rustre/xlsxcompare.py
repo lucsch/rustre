@@ -23,7 +23,6 @@ class Config:
         self.m_col_compare = self.conf.getint(self.m_header, "col_compare")
         self.m_col_copy = self._as_list_comma("col_copy")
         self.m_col_join = self._as_list_of_list("col_join")
-        print (self.m_col_join)
 
     def _as_list_comma(self, config_value):
         my_list = self.conf.get(self.m_header, config_value, fallback=None)
@@ -76,6 +75,9 @@ class Config:
         return dest_list
 
     def do_col_join(self, dest_list, join_cols, row_data):
+        if self.m_col_join is None:
+            return dest_list
+
         # iterate source join cols
         for src_index, src_col in enumerate(join_cols):
             # skip empty index
@@ -87,7 +89,6 @@ class Config:
             for index, col in enumerate(my_cols_int):
                 my_joined_value += str(row_data[col]) + " "
             dest_list[int(src_col)] = my_joined_value.rstrip()
-        print(dest_list)
         return dest_list
 
 
