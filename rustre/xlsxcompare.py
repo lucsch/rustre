@@ -22,6 +22,8 @@ class Config:
         self.m_skip_col_values = self._as_list_new_line("skip_col_values")
         self.m_col_compare = self.conf.getint(self.m_header, "col_compare")
         self.m_col_copy = self._as_list_comma("col_copy")
+        self.m_col_join = self._as_list_of_list("col_join")
+        print (self.m_col_join)
 
     def _as_list_comma(self, config_value):
         my_list = self.conf.get(self.m_header, config_value, fallback=None)
@@ -37,6 +39,15 @@ class Config:
         if my_list is None:
             return None
         return my_list.splitlines()
+
+    def _as_list_of_list(self, config_value):
+        my_list = self._as_list_new_line(config_value)
+        if my_list is not None and "," in my_list[1]:
+            my_new_list = []
+            for item in my_list:
+                my_new_list.append(item.split(","))
+            return my_new_list
+        return my_list
 
     def get_row_id(self, row):
         id_row = []
@@ -62,6 +73,21 @@ class Config:
         """
         for index, col_index in enumerate(self.m_col_copy):
             dest_list[col_order[index]] = row_data[col_index]
+        return dest_list
+
+    def do_col_join(self, dest_list, join_cols, row_data):
+        # iterate source join cols
+        for src_index, src_col in enumerate(join_cols):
+            # skip empty index
+            if src_col == "":
+                continue
+            # iterate target join cols
+            my_joined_value = ""
+            my_cols_int = [int(i) for i in self.m_col_join[src_index]]
+            for index, col in enumerate(my_cols_int):
+                my_joined_value += str(row_data[col]) + " "
+            dest_list[int(src_col)] = my_joined_value.rstrip()
+        print(dest_list)
         return dest_list
 
 
@@ -177,6 +203,7 @@ class XlsxCompare:
         # create empty list
         my_new_row = [None] * len(self.m_xlsx_src.get_columns(1))
         my_new_row = self.m_conf_target.do_col_copy(my_new_row, self.m_conf_src.m_col_copy, row_target)
+        my_new_row = self.m_conf_target.do_col_join(my_new_row, self.m_conf_src.m_col_join, row_target)
         self.m_xlsx_src.append_row(my_new_row)
 
 
