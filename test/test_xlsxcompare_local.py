@@ -37,3 +37,20 @@ def test_file_exists(get_src_local):
 def test_compare(get_src_local, get_config_local, get_target_local):
     xcomp = rustre.xlsxcompare.XlsxCompare(get_config_local, get_src_local, get_target_local)
     assert xcomp.do_compare(os.path.join(UNIT_TEST_PATH_OUTPUT, "compare_local_log.xlsx"))
+
+
+@pytest.fixture(scope="module")
+def get_src_local_full():
+    src_filename = os.path.join(UNIT_TEST_PATH_OUTPUT, "bdd_local_full.xlsx")
+    shutil.copyfile(os.path.join(UNIT_TEST_PATH, "_local", "bdd_full.xlsx"), src_filename)
+    return src_filename
+
+
+@pytest.fixture(scope="module")
+def get_target_local_full():
+    return os.path.join(UNIT_TEST_PATH, "_local", "ordi_full.xlsx")
+
+
+def test_compare_full(get_src_local_full, get_config_local, get_target_local_full):
+    xcomp = rustre.xlsxcompare.XlsxCompare(get_config_local, get_src_local_full, get_target_local_full)
+    assert xcomp.do_compare(os.path.join(UNIT_TEST_PATH_OUTPUT, "compare_local_full_log.xlsx"))
