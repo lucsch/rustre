@@ -100,6 +100,14 @@ class Config:
                     self.m_col_strip_text.append(col_strip)
         self.m_col_copy_change = self._as_list_comma("col_change_copy")
 
+        self.m_col_change_mapping = []
+        my_mapping_list = self._as_list_new_line("col_change_mapping")
+        if my_mapping_list is not None:
+            for row in my_mapping_list:
+                col_map = ColMapping(row)
+                if col_map.is_valid_col():
+                    self.m_col_change_mapping.append(col_map)
+
     def _as_list_comma(self, config_value):
         my_list = self.conf.get(self.m_header, config_value, fallback=None)
         if my_list is None:
@@ -308,8 +316,11 @@ class XlsxCompare:
                 self.m_xlsx_src.change_value(self.m_conf_src.m_col_copy_change[index]+1, src_index, new_value)
 
         # map column if needed (col_change_mapping)
-
-
+        for index, col_map_target in enumerate(self.m_conf_target.m_col_change_mapping):
+            for val_index, col_map_val in enumerate(col_map_target.m_values):
+                if col_map_val == str(row_target[col_map_target.m_col]):
+                    new_value = self.m_conf_src.m_col_change_mapping[index].m_values[val_index]
+                    self.m_xlsx_src.change_value(self.m_conf_src.m_col_change_mapping[index].m_col+1, src_index, new_value)
 
     def do_row_add(self, row_target):
         # create empty list
