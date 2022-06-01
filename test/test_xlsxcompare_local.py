@@ -36,4 +36,4 @@ def test_file_exists(get_src_local):
 
 def test_compare(get_src_local, get_config_local, get_target_local):
     xcomp = rustre.xlsxcompare.XlsxCompare(get_config_local, get_src_local, get_target_local)
-    assert xcomp.do_compare(os.path.join(UNIT_TEST_PATH_OUTPUT, "compare_local.xlsx"))
+    assert xcomp.do_compare(os.path.join(UNIT_TEST_PATH_OUTPUT, "compare_local_log.xlsx"))

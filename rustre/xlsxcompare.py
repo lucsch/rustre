@@ -237,6 +237,7 @@ class XlsxCompare:
         xlsx_result = XlsxFile(log_file)
         result_header = self.m_conf_target.get_row_id(self.m_xlsx_target.get_columns(1))
         result_header.append("STATUS")
+        result_header.append("STATUS_DESCRIPTION")
         xlsx_result.append_row(result_header)
 
         # iterate all row in target file
@@ -271,6 +272,8 @@ class XlsxCompare:
                         # add the status to the log
                         row_write = self.m_conf_target.get_row_id(row_target)
                         row_write.append("CHANGED")
+                        my_status_desc = row_target[self.m_conf_target.m_col_compare]
+                        row_write.append(my_status_desc)
                         xlsx_result.append_row(row_write)
                         break
 
