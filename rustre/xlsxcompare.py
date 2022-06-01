@@ -98,6 +98,7 @@ class Config:
                 col_strip = ColStripText(row)
                 if row is not None:
                     self.m_col_strip_text.append(col_strip)
+        self.m_col_copy_change = self._as_list_comma("col_change_copy")
 
     def _as_list_comma(self, config_value):
         my_list = self.conf.get(self.m_header, config_value, fallback=None)
@@ -300,8 +301,15 @@ class XlsxCompare:
         """
         self.m_xlsx_src.change_value(self.m_conf_src.m_col_compare+1, src_index,
                                      row_target[self.m_conf_target.m_col_compare])
-        # TODO: Check if we need to modify all the columns or only the compare one...
-        # for example if the address has changed
+        # copy col if needed (col_change_copy)
+        if self.m_conf_target.m_col_copy_change:
+            for index, col_copy_target in enumerate(self.m_conf_target.m_col_copy_change):
+                new_value = row_target[col_copy_target]
+                self.m_xlsx_src.change_value(self.m_conf_src.m_col_copy_change[index]+1, src_index, new_value)
+
+        # map column if needed (col_change_mapping)
+
+
 
     def do_row_add(self, row_target):
         # create empty list
