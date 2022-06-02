@@ -272,8 +272,6 @@ class XlsxCompare:
                     row_found = True
 
                     # check if row has changed
-                    print(row_src[self.m_conf_src.m_col_compare])
-                    print(row_target[self.m_conf_target.m_col_compare])
                     if row_src[self.m_conf_src.m_col_compare] != row_target[self.m_conf_target.m_col_compare]:
                         # modify the src
                         self.do_row_change(row_target, src_row_index)
@@ -330,7 +328,6 @@ class XlsxCompare:
         my_new_row = self.m_conf_target.do_col_mapping(my_new_row, self.m_conf_src.m_col_mapping, row_target)
         my_new_row = self.m_conf_target.do_col_condition(my_new_row, self.m_conf_src.m_col_condition, row_target)
         my_new_row = self.m_conf_target.do_col_strip_text(my_new_row, self.m_conf_src.m_col_strip_text, row_target)
-        print(my_new_row)
         self.m_xlsx_src.append_row(my_new_row)
 
     def _get_target_formated_row(self, row_target, conf_target):

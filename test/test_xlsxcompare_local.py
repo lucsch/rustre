@@ -51,6 +51,25 @@ def get_target_local_full():
     return os.path.join(UNIT_TEST_PATH, "_local", "ordi_full.xlsx")
 
 
+@pytest.mark.skip(reason="Very long test")
 def test_compare_full(get_src_local_full, get_config_local, get_target_local_full):
     xcomp = rustre.xlsxcompare.XlsxCompare(get_config_local, get_src_local_full, get_target_local_full)
     assert xcomp.do_compare(os.path.join(UNIT_TEST_PATH_OUTPUT, "compare_local_full_log.xlsx"))
+
+
+@pytest.fixture(scope="module")
+def get_src_local_mid():
+    src_filename = os.path.join(UNIT_TEST_PATH_OUTPUT, "bdd_local_mid.xlsx")
+    shutil.copyfile(os.path.join(UNIT_TEST_PATH, "_local", "bdd_mid.xlsx"), src_filename)
+    return src_filename
+
+
+@pytest.fixture(scope="module")
+def get_target_local_mid():
+    return os.path.join(UNIT_TEST_PATH, "_local", "ordi_mid.xlsx")
+
+
+# @pytest.mark.skip(reason="Very long test")
+def test_compare_mid(get_src_local_mid, get_config_local, get_target_local_mid):
+    xcomp = rustre.xlsxcompare.XlsxCompare(get_config_local, get_src_local_mid, get_target_local_mid)
+    assert xcomp.do_compare(os.path.join(UNIT_TEST_PATH_OUTPUT, "compare_local_mid_log.xlsx"))
