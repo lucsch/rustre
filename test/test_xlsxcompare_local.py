@@ -73,3 +73,4 @@ def get_target_local_mid():
 def test_compare_mid(get_src_local_mid, get_config_local, get_target_local_mid):
     xcomp = rustre.xlsxcompare.XlsxCompare(get_config_local, get_src_local_mid, get_target_local_mid)
     assert xcomp.do_compare(os.path.join(UNIT_TEST_PATH_OUTPUT, "compare_local_mid_log.xlsx"))
+

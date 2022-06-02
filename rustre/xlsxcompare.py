@@ -250,9 +250,9 @@ class XlsxCompare:
         xlsx_result.append_row(result_header)
 
         # iterate all row in target file
-        for target_row_index in range(2, self.m_xlsx_target.get_row_count()+1):
-            row_target = self.m_xlsx_target.get_columns(target_row_index)
-            # id_target = self._get_id(row_target, self.m_conf_target)
+        for row in self.m_xlsx_target.m_sheet.iter_rows(min_row=2, max_row=self.m_xlsx_target.get_row_count(),
+                                                               min_col=0, max_col=self.m_xlsx_target.m_total_col):
+            row_target = [cell.value for cell in row]
             id_target = self.m_conf_target.get_row_id(row_target)
 
             # do we need to skip this row ?
@@ -264,10 +264,12 @@ class XlsxCompare:
 
             # iterate all row in source file
             row_found = False
-            for src_row_index in range(2, self.m_xlsx_src.get_row_count()+1):
-                row_src = self.m_xlsx_src.get_columns(src_row_index)
-                # id_src = self._get_id(row_src, conf_src)
+            src_row_index = 1
+            for src_row_obj in self.m_xlsx_src.m_sheet.iter_rows(min_row=2, max_row=self.m_xlsx_target.get_row_count(),
+                                                                 min_col=0, max_col=self.m_xlsx_target.m_total_col):
+                row_src = [cell.value for cell in src_row_obj]
                 id_src = self.m_conf_src.get_row_id(row_src)
+                src_row_index += 1
                 if id_src == id_target:
                     row_found = True
 
