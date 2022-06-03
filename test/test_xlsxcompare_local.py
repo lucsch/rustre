@@ -55,6 +55,10 @@ def get_target_local_full():
 def test_compare_full(get_src_local_full, get_config_local, get_target_local_full):
     xcomp = rustre.xlsxcompare.XlsxCompare(get_config_local, get_src_local_full, get_target_local_full)
     assert xcomp.do_compare(os.path.join(UNIT_TEST_PATH_OUTPUT, "compare_local_full_log.xlsx"))
+    x_src = rustre.xlsxfile.XlsxFile(get_src_local_full)
+    my_values = x_src.get_columns(48)
+    assert my_values[0] == "quitté"
+    assert my_values[14] == "07.04.2022"
 
 
 @pytest.fixture(scope="module")
