@@ -10,8 +10,8 @@ from .context import UNIT_TEST_PATH_OUTPUT
 from .context import UNIT_TEST_PATH
 
 if not os.path.exists(os.path.join(UNIT_TEST_PATH, "_local")):
-    print("Path exist!!!!!")
     pytest.skip("Skipping local test", allow_module_level=True)
+
 
 @pytest.fixture(scope="module")
 def get_src_local():
