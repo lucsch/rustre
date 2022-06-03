@@ -34,6 +34,9 @@ def test_file_exists(get_src_filename):
 def test_compare(get_src_filename, get_config_file, get_target_filename):
     xcomp = rustre.xlsxcompare.XlsxCompare(get_config_file, get_src_filename, get_target_filename)
     assert xcomp.do_compare(os.path.join(UNIT_TEST_PATH_OUTPUT, "compare_log1.xlsx"))
+    x_src = rustre.xlsxfile.XlsxFile(get_src_filename)
+    my_values = x_src.get_columns(2)
+    assert my_values[8] == "no"
 
 
 @pytest.fixture(scope="module")

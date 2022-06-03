@@ -192,9 +192,9 @@ class Config:
                 dest_list[col_condition_obj[index].m_col_two] = col_condition_obj[index].m_value
                 dest_list[col_condition_obj[index].m_col_one] = row_data[cond_obj.m_col_one].split(",")[0]
                 return dest_list
-        if strip_comma:
-            my_value = row_data[cond_obj.m_col_one]
-            dest_list[col_condition_obj[index].m_col_two] = my_value.split(",")[0]
+            if strip_comma:
+                my_value = row_data[cond_obj.m_col_one]
+                dest_list[col_condition_obj[index].m_col_two] = my_value.split(",")[0]
         return dest_list
 
     def do_col_strip_text(self, dest_list, col_strip_text_obj, row_data):
@@ -233,7 +233,6 @@ class XlsxCompare:
         self.m_xlsx_src = XlsxFile(self.m_file_source, sheet_number=0, load_in_memory=True)
         self.m_xlsx_target = XlsxFile(self.m_file_target, sheet_number=0, load_in_memory=True)
 
-
     def do_compare(self, log_file):
         """Compare source with target and modify source based on the data model defined in Config
 
@@ -265,11 +264,9 @@ class XlsxCompare:
 
             # iterate all row in source file
             row_found = False
-            src_row_index = 1
-            for src_row_index in range(2, self.m_xlsx_src.get_row_count() + 1):
+            for src_row_index in range(1, self.m_xlsx_src.get_row_count()):
                 row_src = self.m_xlsx_src.get_columns(src_row_index)
                 id_src = self.m_conf_src.get_row_id(row_src)
-                src_row_index += 1
                 if id_src == id_target:
                     row_found = True
 

@@ -24,7 +24,7 @@ def test_merge_file_exists(get_test_files):
     for file in get_test_files:
         assert os.path.exists(file)
 
-
+@pytest.mark.skip(reason="Very long test")
 def test_merge_two_files(get_test_files):
     xmerge = rustre.xlsxmerge.XlsxMerge(get_test_files, sheet_index=0, header_index=7)
     out_file = os.path.join(UNIT_TEST_PATH_OUTPUT, "test_merge_full.xlsx")
