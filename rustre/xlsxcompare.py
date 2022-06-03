@@ -184,15 +184,17 @@ class Config:
                     dest_list[col_mapping_obj[index].m_col] = col_mapping_obj[index].m_values[val_index]
         return dest_list
 
-    def do_col_condition(self, dest_list, col_condition_obj, row_data):
+    def do_col_condition(self, dest_list, col_condition_obj, row_data, strip_comma=True):
         if col_condition_obj is None:
             return dest_list
         for index, cond_obj in enumerate(self.m_col_condition):
             if cond_obj.m_value in row_data[cond_obj.m_col_one]:
-                dest_list[col_condition_obj[index].m_col_one] = row_data[cond_obj.m_col_one]
                 dest_list[col_condition_obj[index].m_col_two] = col_condition_obj[index].m_value
-            else:
-                dest_list[col_condition_obj[index].m_col_two] = row_data[cond_obj.m_col_one]
+                dest_list[col_condition_obj[index].m_col_one] = row_data[cond_obj.m_col_one].split(",")[0]
+                return dest_list
+        if strip_comma:
+            my_value = row_data[cond_obj.m_col_one]
+            dest_list[col_condition_obj[index].m_col_two] = my_value.split(",")[0]
         return dest_list
 
     def do_col_strip_text(self, dest_list, col_strip_text_obj, row_data):
@@ -228,8 +230,8 @@ class XlsxCompare:
         self.m_conf_target = Config("TARGET", self.m_config_file)
 
         # open the files
-        self.m_xlsx_src = XlsxFile(self.m_file_source, sheet_number=0)
-        self.m_xlsx_target = XlsxFile(self.m_file_target, sheet_number=0)
+        self.m_xlsx_src = XlsxFile(self.m_file_source, sheet_number=0, load_in_memory=True)
+        self.m_xlsx_target = XlsxFile(self.m_file_target, sheet_number=0, load_in_memory=True)
 
 
     def do_compare(self, log_file):
@@ -250,9 +252,8 @@ class XlsxCompare:
         xlsx_result.append_row(result_header)
 
         # iterate all row in target file
-        for row in self.m_xlsx_target.m_sheet.iter_rows(min_row=2, max_row=self.m_xlsx_target.get_row_count(),
-                                                               min_col=0, max_col=self.m_xlsx_target.m_total_col):
-            row_target = [cell.value for cell in row]
+        for target_row_index in range(2, self.m_xlsx_target.get_row_count() + 1):
+            row_target = self.m_xlsx_target.get_columns(target_row_index)
             id_target = self.m_conf_target.get_row_id(row_target)
 
             # do we need to skip this row ?
@@ -265,9 +266,8 @@ class XlsxCompare:
             # iterate all row in source file
             row_found = False
             src_row_index = 1
-            for src_row_obj in self.m_xlsx_src.m_sheet.iter_rows(min_row=2, max_row=self.m_xlsx_target.get_row_count(),
-                                                                 min_col=0, max_col=self.m_xlsx_target.m_total_col):
-                row_src = [cell.value for cell in src_row_obj]
+            for src_row_index in range(2, self.m_xlsx_src.get_row_count() + 1):
+                row_src = self.m_xlsx_src.get_columns(src_row_index)
                 id_src = self.m_conf_src.get_row_id(row_src)
                 src_row_index += 1
                 if id_src == id_target:

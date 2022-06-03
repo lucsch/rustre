@@ -15,7 +15,7 @@ class XlsxFile:
         :type sheet_number: int
     """
 
-    def __init__(self, filename, sheet_number=0):
+    def __init__(self, filename, sheet_number=0, load_in_memory=False):
         self.m_filename = filename
         if not os.path.exists(self.m_filename):
             raise ValueError("File: {} didn't exist!".format(self.m_filename))
@@ -24,6 +24,13 @@ class XlsxFile:
         self.m_sheet = self.m_wb.worksheets[sheet_number]
         self.m_total_row = self.m_sheet.max_row
         self.m_total_col = self.m_sheet.max_column
+        self.m_load_in_memory = load_in_memory
+        self.m_data = []
+
+        if self.m_load_in_memory:
+            for row in self.m_sheet.iter_rows(min_row=0, max_row=self.m_total_row, min_col=0, max_col=self.m_total_col):
+                my_row_list = [cell.value for cell in row]
+                self.m_data.append(my_row_list)
 
     @staticmethod
     def create_file(filename):
@@ -49,6 +56,8 @@ class XlsxFile:
             :return: a list of all values in a row
             :rtype: list
         """
+        if self.m_load_in_memory:
+            return self.m_data[row_number-1]
         return [cell.value for cell in self.m_sheet[row_number]]
 
     def get_row_count(self):
