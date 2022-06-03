@@ -1,7 +1,9 @@
+import os.path
 import pathlib
 
 import wx
 from rustre.xlsxmerge import XlsxMerge
+from rustre.xlsxcompare import XlsxCompare
 
 
 class FrameMain(wx.Frame):  # pragma: no cover
@@ -16,6 +18,7 @@ class FrameMain(wx.Frame):  # pragma: no cover
         self.Bind(wx.EVT_BUTTON, self.on_button_paste, id=self.m_btn_paste.GetId())
         self.Bind(wx.EVT_BUTTON, self.on_button_clear, id=self.m_btn_clear.GetId())
         self.Bind(wx.EVT_BUTTON, self.on_button_merge, id=self.m_btn_do_merge.GetId())
+        self.Bind(wx.EVT_BUTTON, self.on_button_compare, id=self.m_btn_compare.GetId())
 
     def on_button_paste(self, event):
         if not wx.TheClipboard.IsOpened():
@@ -48,6 +51,37 @@ class FrameMain(wx.Frame):  # pragma: no cover
             wx.LogError("Merging failed!")
             return
         wx.LogMessage("Merging done!")
+
+    def on_button_compare(self, event):
+        my_ref_path = self.m_ctrl_reference.GetPath()
+        my_target_path = self.m_ctrl_target.GetPath()
+        my_model_path = self.m_ctrl_model.GetPath()
+        my_log_path = self.m_ctrl_result.GetPath()
+
+        berror = False
+        if not os.path.exists(my_ref_path):
+            wx.LogError("Reference path not specified!")
+            berror = True
+        if not os.path.exists(my_target_path):
+            wx.LogError("Target path not specified!")
+            berror = True
+        if not os.path.exists(my_model_path):
+            wx.LogError("Model path not specified!")
+            berror = True
+        if my_log_path == "":
+            wx.LogError("Log path not specified!")
+            berror = True
+
+        if berror:
+            return
+
+        # add xlsx extension if not present
+        if pathlib.Path(my_log_path).suffix != ".xlsx":
+            my_log_path += ".xlsx"
+
+        cursor = wx.BusyCursor()
+        xcomp = XlsxCompare(my_model_path, my_ref_path, my_target_path)
+        xcomp.do_compare(my_log_path)
 
     def _create_statusbar(self):
         self.CreateStatusBar()
