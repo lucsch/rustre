@@ -59,6 +59,9 @@ def get_config_file2():
 def test_compare2(get_src_filename2, get_config_file2, get_target_filename2):
     xcomp = rustre.xlsxcompare.XlsxCompare(get_config_file2, get_src_filename2, get_target_filename2)
     assert xcomp.do_compare(os.path.join(UNIT_TEST_PATH_OUTPUT, "compare_log2.xlsx"))
+    x_src = rustre.xlsxfile.XlsxFile(get_src_filename2)
+    my_values = x_src.get_columns(8)
+    assert my_values[7] == "Wife of Alexander Baker"
 
 
 
