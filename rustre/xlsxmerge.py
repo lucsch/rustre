@@ -37,10 +37,10 @@ class XlsxMerge:
             :rtype: bool
         """
         # compare headers
-        xlsx1 = XlsxFile(self.m_source_files[0], self.m_sheet_index)
+        xlsx1 = XlsxFile(self.m_source_files[0], self.m_sheet_index, load_in_memory=False)
         header_xlsx1 = xlsx1.get_columns(self.m_header_index)
         for index in range(1, len(self.m_source_files)):
-            xlsx2 = XlsxFile(self.m_source_files[index], self.m_sheet_index)
+            xlsx2 = XlsxFile(self.m_source_files[index], self.m_sheet_index, load_in_memory=False)
             header_xlsx2 = xlsx2.get_columns(self.m_header_index)
             if header_xlsx1 != header_xlsx2:
                 logging.error("Xlsx headers are not equal")
@@ -53,7 +53,7 @@ class XlsxMerge:
             return False
 
         xlsx_result = XlsxFile(result_file)
-        xlsx_source1 = XlsxFile(self.m_source_files[0], self.m_sheet_index)
+        xlsx_source1 = XlsxFile(self.m_source_files[0], self.m_sheet_index, load_in_memory=True)
         m_row_tot = xlsx_source1.get_row_count()
         for r in range(self.m_header_index, m_row_tot + 1):
             my_row = xlsx_source1.get_columns(r)
@@ -61,7 +61,7 @@ class XlsxMerge:
 
         # merge the other files
         for index in range(1, len(self.m_source_files)):
-            xlsx_src = XlsxFile(self.m_source_files[index], self.m_sheet_index)
+            xlsx_src = XlsxFile(self.m_source_files[index], self.m_sheet_index, load_in_memory=True)
             for r in range(self.m_header_index + 1, xlsx_src.get_row_count() + 1):
                 my_row = xlsx_src.get_columns(r)
                 xlsx_result.append_row(my_row)
