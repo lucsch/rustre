@@ -103,7 +103,7 @@ class FrameMain(wx.Frame):  # pragma: no cover
 
         m_ctrl_listChoices = []
         self.m_ctrl_list = wx.ListBox(sbSizer1.GetStaticBox(), wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize,
-                                      m_ctrl_listChoices, wx.LB_EXTENDED | wx.LB_MULTIPLE)
+                                      m_ctrl_listChoices, wx.LB_MULTIPLE)
         sbSizer1.Add(self.m_ctrl_list, 1, wx.ALL | wx.EXPAND, 5)
 
         bSizer4 = wx.BoxSizer(wx.HORIZONTAL)
