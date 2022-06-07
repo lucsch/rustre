@@ -4,6 +4,9 @@ import pathlib
 import wx
 from rustre.xlsxmerge import XlsxMerge
 from rustre.xlsxcompare import XlsxCompare
+from rustre.version import COMMIT_ID
+from rustre.version import COMMIT_NUMBER
+from rustre.version import VERSION_MAJOR_MINOR
 
 
 class FrameMain(wx.Frame):  # pragma: no cover
@@ -85,6 +88,8 @@ class FrameMain(wx.Frame):  # pragma: no cover
 
     def _create_statusbar(self):
         self.CreateStatusBar()
+        self.SetStatusBarPane(-1)  # don't display menu hints
+        self.SetStatusText("version: {}.{} ({})".format(VERSION_MAJOR_MINOR, COMMIT_NUMBER, COMMIT_ID))
 
     def _create_controls(self):
         self.SetSizeHints(wx.DefaultSize, wx.DefaultSize)
