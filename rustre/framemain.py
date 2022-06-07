@@ -7,6 +7,7 @@ from rustre.xlsxcompare import XlsxCompare
 from rustre.version import COMMIT_ID
 from rustre.version import COMMIT_NUMBER
 from rustre.version import VERSION_MAJOR_MINOR
+from rustre.bitmap import rustre_icon
 
 
 class FrameMain(wx.Frame):  # pragma: no cover
@@ -16,6 +17,11 @@ class FrameMain(wx.Frame):  # pragma: no cover
                           size=wx.DefaultSize, style=wx.DEFAULT_DIALOG_STYLE | wx.RESIZE_BORDER)
         self._create_controls()
         self._create_statusbar()
+
+        # add icon
+        icon = wx.Icon()
+        icon.CopyFromBitmap(rustre_icon.GetBitmap())
+        self.SetIcon(icon)
 
         # bind events
         self.Bind(wx.EVT_BUTTON, self.on_button_paste, id=self.m_btn_paste.GetId())
