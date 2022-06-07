@@ -1,0 +1,10 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=rustre
+GenericName=rustre
+Comment=rustre
+Exec=/usr/bin/rustre
+Icon=rustre
+Terminal=false
+Type=Application
+Categories=Utility;
