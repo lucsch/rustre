@@ -7,3 +7,4 @@ pytest-cov
 coveralls
 wxPython
 flake8
+pyinstaller

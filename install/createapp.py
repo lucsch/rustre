@@ -74,10 +74,10 @@ class CreateApp(object):
             "--hidden-import=wx",
             "--hidden-import=wx._xml",
             "--hidden-import=pkg_resources.py2_warn",
-            "--hidden-import=sqlalchemy.ext.baked",
+            # "--hidden-import=sqlalchemy.ext.baked",
             "-nrustre_{}".format(self.m_commit_number),
             "--icon={}".format(self.iconfile),
-            "--add-data={}".format(os.path.join(self.basepath, "rustre", "html") + os.pathsep + "html"),
+            # "--add-data={}".format(os.path.join(self.basepath, "rustre", "html") + os.pathsep + "html"),
             os.path.join(self.basepath, "rustre", "__main__.py")]
         print(command)
         try:
@@ -91,11 +91,11 @@ class CreateApp(object):
 
         # run pyinstaller with spec file
         try:
-            p = subprocess.Popen(["pyinstaller", "siboulo_{}.spec".format(self.m_commit_number), "-y"],
+            p = subprocess.Popen(["pyinstaller", "rustre_{}.spec".format(self.m_commit_number), "-y"],
                                  cwd=self.binpath)
             p.wait()
         except (OSError, ValueError):
-            print("Error running : pyinstaller siboulo.spec")
+            print("Error running : pyinstaller rustre.spec")
             return False
 
 

@@ -22,6 +22,7 @@ Use `pip install -r requirements_linux.txt` on Linux
    - wxPython (GUI)
    - pytest-cov (code coverage)
    - flake8 (linting)
+   - pyinstaller (Installation)
    - coveralls (only needed to upload code coverage to coveralls.io)
    - sphinx (only needed for building the documentation)
    - myst-parser (markdown support for sphinx)
