@@ -17,34 +17,71 @@ The source file is the reference. Only this file can be modified according to th
 
 For each group, the following values are required:
 
-| Option         | Value  | Description                                                                                               | Exemple               |
-|----------------|--------|-----------------------------------------------------------------------------------------------------------|-----------------------|
-| id_col         | list   | the columns used to create an identity (column index is zero based)                                       | `id_col = 0,1,3`        |
-| skip_col       | number | the index of the column in which to check if the data should be skipped (Zero based index, could be None) | `skip_col = 7`          |
-| skip_col_value | text   | if the parsed cell (in column skip_col) is equal to this value, we ignore the row when parsing the file   | `skip_col_value = Test` |
-| col_compare    | number | The comparison column between source and target files                                                     | `col_compare = 4`       |
-| col_order      | list   | The order of the columns so that those in the target file match those in the source file                  | `col_order = 0,1,7,8`   |
+| Option             | Value  | Description                                                                                                                  |
+|--------------------|--------|------------------------------------------------------------------------------------------------------------------------------|
+| id_col             | list   | the columns used to create an identity (column index is zero based)                                                          |
+| skip_col           | number | the index of the column in which to check if the data should be skipped (Zero based index, could be None)                    |
+| skip_col_value     | text   | if the parsed cell (in column skip_col) is equal to this value, we ignore the row when parsing the file                      |
+| col_compare        | number | The comparison column between source and target files                                                                        |
+| col_change_copy    | list   | The columns to copy into source if a change is found (zero based index)                                                      |
+| col_change_mapping | list   | A list of replacement values. Each line must contain the following information: the column number followed by a list of values to replace |
+| col_copy           | list   | The number of the columns to copy                                                                                            |
+| col_join           | list   | The index of columns to be joined                                                                                            |
+| col_col_mapping    | list   | A list of replacement values, see col_change_mapping for the structure                                                       |
+| col_condition      | list   | Conditional modification of cells. Each row contains the original column, the content to search and the destination column if the content is found                                                                                                                             |
+| col_strip_text     | list   | A list with the column to modify and the number of characters to remove                                     |
 
 
 ## Sample
 
 
-An example of a complete configuration file is available bellow (see also `test/data/test_compare.ini`)
+An example of a complete configuration file is available bellow (see also `test/data/test_compare2.ini`)
 
 ```ini
 [SOURCE]
-id_col= 0,1,3
-skip_col =
-skip_col_value =
-col_compare = 8
-col_order = 0,1,2,3,4,5,6,7,8
+id_col= 3,2,5
+; skip_col =
+; skip_col_values =
+col_compare = 1
+col_change_copy = 15,16
+col_change_mapping =
+        0,Activ,Inactiv
+col_copy = 3,2,5,1
+col_join =
+        11
+        12
+col_mapping =
+        0,Activ,Inactiv
+        4,M,F
+        9,Microsoft,Easyjet
+        10,Redmond; Washington; USA, London Luton Airport; UK
+col_condition =
+        7,familly member,8
+col_strip_text =
+        6,-1
 
 [TARGET]
-id_col = 0,1,3
-skip_col = 7
-skip_col_value = Chef / Boss
-col_compare = 4
-col_order = 0,1,2,3,5,6,7,8,4
+id_col = 1,2,3
+skip_col = 6
+skip_col_values =
+        Child
+col_compare = 7
+col_change_copy = 14,13
+col_change_mapping =
+        7,announced,gone
+col_copy = 1,2,3,7
+col_join =
+        9,8
+        10,11
+col_mapping =
+        7,announced,gone
+        4,Male,Female
+        0,42,500
+        0,42,500
+col_condition =
+        6,Wife,-1
+col_strip_text =
+        5,3
 ```
 
 
