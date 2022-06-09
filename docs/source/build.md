@@ -42,4 +42,9 @@ in the `RUSTRE/docs` folder run the following command:
 
       make html
 
+## Running the GUI
+
+      python -m rustre
+
+![Rustre GUI](img/rustre_gui.png)
 
