@@ -1,0 +1,45 @@
+
+name: Publish windows release
+
+on:
+  release:
+    types: [created]
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+    - name: Set up Python 3.9
+      uses: actions/setup-python@v2
+      with:
+        python-version: 3.9
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+
+    - name: Create the version file
+      run: |
+        cd rustre
+        python createversion.py version.py
+        cd ..
+    - name: Create the binary
+      run: |
+        cd install
+        python createapp.py Windows
+        cd ..
+    - name: upload file
+      uses: xresloader/upload-to-github-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        file: "*.exe;bin/dist/*.exe"
+        tags: true
+        draft: true
+#    - name: Test with pytest
+#      run: |
+#        pytest test
