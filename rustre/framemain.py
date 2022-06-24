@@ -52,7 +52,7 @@ class FrameMain(wx.Frame):  # pragma: no cover
             wx.LogError("Error merging files, check your data!")
             return
         # add xlsx extension if not present
-        result_filename = self.m_ctrl_result.GetPath()
+        result_filename = self.m_ctrl_result_union.GetPath()
         if pathlib.Path(result_filename).suffix != ".xlsx":
             result_filename += ".xlsx"
 
@@ -164,10 +164,10 @@ class FrameMain(wx.Frame):  # pragma: no cover
 
         sbSizer3 = wx.StaticBoxSizer(wx.StaticBox(self.m_page_merge, wx.ID_ANY, u"Result"), wx.VERTICAL)
 
-        self.m_ctrl_result = wx.FilePickerCtrl(sbSizer3.GetStaticBox(), wx.ID_ANY, wx.EmptyString, u"Select a file",
+        self.m_ctrl_result_union = wx.FilePickerCtrl(sbSizer3.GetStaticBox(), wx.ID_ANY, wx.EmptyString, u"Select a file",
                                                u"*.xlsx", wx.DefaultPosition, wx.DefaultSize,
                                                wx.FLP_SAVE | wx.FLP_USE_TEXTCTRL)
-        sbSizer3.Add(self.m_ctrl_result, 0, wx.ALL | wx.EXPAND, 5)
+        sbSizer3.Add(self.m_ctrl_result_union, 0, wx.ALL | wx.EXPAND, 5)
 
         bSizer3.Add(sbSizer3, 0, wx.EXPAND | wx.ALL, 5)
 
