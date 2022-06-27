@@ -64,6 +64,23 @@ def test_compare2(get_src_filename2, get_config_file2, get_target_filename2):
     assert my_values[7] == "Wife of Alexander Baker"
 
 
+def test_count_cols(get_config_file):
+    xconf = rustre.Config("SOURCE", get_config_file)
+    assert xconf.count_columns() == 9
+    xconf2 = rustre.Config("TARGET", get_config_file)
+    assert xconf2.count_columns() == 9
+
+
+def test_count_cols2(get_config_file2):
+    xconf = rustre.Config("SOURCE", get_config_file2)
+    assert xconf.count_columns() == 12
+    xconf2 = rustre.Config("TARGET", get_config_file2)
+    assert xconf2.count_columns() == 12
+
+
+def test_compare_bug(get_src_filename, get_config_file2, get_target_filename2):
+    xcomp = rustre.xlsxcompare.XlsxCompare(get_config_file2, get_src_filename, get_target_filename2)
+    assert xcomp.do_compare(os.path.join(UNIT_TEST_PATH_OUTPUT, "compare_log3.xlsx")) is False
 
 
 

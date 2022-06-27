@@ -1,5 +1,8 @@
 #!/usr/bin/env python3
 from configparser import ConfigParser
+
+import wx
+
 from rustre.xlsxfile import XlsxFile
 
 
@@ -107,6 +110,20 @@ class Config:
                 col_map = ColMapping(row)
                 if col_map.is_valid_col():
                     self.m_col_change_mapping.append(col_map)
+
+    def count_columns(self):
+        my_cols = 0
+        if self.m_col_copy:
+            my_cols += len(self.m_col_copy)
+        if self.m_col_join:
+            my_cols += len(self.m_col_join[1:])
+        if self.m_col_mapping:
+            my_cols += len(self.m_col_mapping)
+        if self.m_col_condition:
+            my_cols += len(self.m_col_condition)
+        if self.m_col_strip_text:
+            my_cols += len(self.m_col_strip_text[1:])
+        return my_cols
 
     def _as_list_comma(self, config_value):
         my_list = self.conf.get(self.m_header, config_value, fallback=None)
@@ -241,6 +258,15 @@ class XlsxCompare:
             :return: True or False
             :rtype: bool
         """
+        # check (bug #1)
+        my_src_row = self.m_xlsx_src.get_columns()
+        my_tgt_row = self.m_xlsx_target.get_columns()
+        if self.m_conf_src.count_columns() > len(my_src_row):
+            wx.LogError("Number of source columns mismatch with ini file")
+            return False
+        if self.m_conf_target.count_columns() > len(my_tgt_row):
+            wx.LogError("Number of target columns mismatch with ini file")
+            return False
 
         # create result log file
         XlsxFile.create_file(log_file)

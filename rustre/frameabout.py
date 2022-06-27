@@ -9,7 +9,8 @@ from rustre.version import COMMIT_NUMBER
 from rustre.version import VERSION_MAJOR_MINOR
 from openpyxl import __version__
 
-class FrameAbout(wx.Dialog):
+
+class FrameAbout(wx.Dialog):  # pragma: no cover
 
     def __init__(self, parent, programname):
         wx.Dialog.__init__(self, parent, id=wx.ID_ANY, title=u"About", pos=wx.DefaultPosition, size=wx.DefaultSize,
