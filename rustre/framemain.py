@@ -16,6 +16,7 @@ class FrameMain(wx.Frame):  # pragma: no cover
         wx.Frame.__init__(self, None, id=wx.ID_ANY, title="RUSTRE", pos=wx.DefaultPosition,
                           size=wx.DefaultSize, style=wx.DEFAULT_DIALOG_STYLE | wx.RESIZE_BORDER)
         self._create_controls()
+        self._create_menubar()
         self._create_statusbar()
 
         # add icon
@@ -28,6 +29,9 @@ class FrameMain(wx.Frame):  # pragma: no cover
         self.Bind(wx.EVT_BUTTON, self.on_button_clear, id=self.m_btn_clear.GetId())
         self.Bind(wx.EVT_BUTTON, self.on_button_merge, id=self.m_btn_do_merge.GetId())
         self.Bind(wx.EVT_BUTTON, self.on_button_compare, id=self.m_btn_compare.GetId())
+        self.Bind(wx.EVT_MENU, self.on_menu_exit, id=self.m_menu_item_exit.GetId())
+        self.Bind(wx.EVT_MENU, self.on_menu_about, id=self.m_menu_item_about.GetId())
+        self.Bind(wx.EVT_MENU, self.on_menu_documentation, id=self.m_menu_item_doc.GetId())
 
     def on_button_paste(self, event):
         if not wx.TheClipboard.IsOpened():
@@ -92,10 +96,38 @@ class FrameMain(wx.Frame):  # pragma: no cover
         xcomp = XlsxCompare(my_model_path, my_ref_path, my_target_path)
         xcomp.do_compare(my_log_path)
 
+    def on_menu_exit(self, event):
+        self.Destroy()
+
+    def on_menu_about(self, event):
+        pass
+
+    def on_menu_documentation(self, event):
+        wx.LaunchDefaultBrowser("https://rustre.readthedocs.io")
+
     def _create_statusbar(self):
         self.CreateStatusBar()
         self.SetStatusBarPane(-1)  # don't display menu hints
         self.SetStatusText("version: {}.{} ({})".format(VERSION_MAJOR_MINOR, COMMIT_NUMBER, COMMIT_ID))
+
+    def _create_menubar(self):
+        self.m_menubar1 = wx.MenuBar(0)
+        self.m_menu_file = wx.Menu()
+        self.m_menu_item_exit = wx.MenuItem(self.m_menu_file, wx.ID_EXIT, u"Exit", wx.EmptyString, wx.ITEM_NORMAL)
+        self.m_menu_file.Append(self.m_menu_item_exit)
+
+        self.m_menubar1.Append(self.m_menu_file, u"File")
+
+        self.m_menu_help = wx.Menu()
+        self.m_menu_item_about = wx.MenuItem(self.m_menu_help, wx.ID_ABOUT, u"About...", wx.EmptyString, wx.ITEM_NORMAL)
+        self.m_menu_help.Append(self.m_menu_item_about)
+
+        self.m_menu_item_doc = wx.MenuItem(self.m_menu_help, wx.ID_ANY, u"Documentation...", wx.EmptyString,
+                                           wx.ITEM_NORMAL)
+        self.m_menu_help.Append(self.m_menu_item_doc)
+
+        self.m_menubar1.Append(self.m_menu_help, u"Help")
+        self.SetMenuBar(self.m_menubar1)
 
     def _create_controls(self):
         self.SetSizeHints(wx.DefaultSize, wx.DefaultSize)
