@@ -95,7 +95,10 @@ class FrameMain(wx.Frame):  # pragma: no cover
 
         cursor = wx.BusyCursor()
         xcomp = XlsxCompare(my_model_path, my_ref_path, my_target_path)
-        xcomp.do_compare(my_log_path)
+        if xcomp.do_compare(my_log_path) is False:
+            wx.LogError("Comparing files failed! please check source, target and and ini files")
+            return
+        wx.LogMessage("Compare done!")
 
     def on_menu_exit(self, event):
         self.Destroy()

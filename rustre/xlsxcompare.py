@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 from configparser import ConfigParser
 
-import wx
-
 from rustre.xlsxfile import XlsxFile
 
 
@@ -262,10 +260,8 @@ class XlsxCompare:
         my_src_row = self.m_xlsx_src.get_columns()
         my_tgt_row = self.m_xlsx_target.get_columns()
         if self.m_conf_src.count_columns() > len(my_src_row):
-            wx.LogError("Number of source columns mismatch with ini file")
             return False
         if self.m_conf_target.count_columns() > len(my_tgt_row):
-            wx.LogError("Number of target columns mismatch with ini file")
             return False
 
         # create result log file
