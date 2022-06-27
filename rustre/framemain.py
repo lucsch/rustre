@@ -8,6 +8,7 @@ from rustre.version import COMMIT_ID
 from rustre.version import COMMIT_NUMBER
 from rustre.version import VERSION_MAJOR_MINOR
 from rustre.bitmap import rustre_icon
+from rustre.frameabout import FrameAbout
 
 
 class FrameMain(wx.Frame):  # pragma: no cover
@@ -100,7 +101,8 @@ class FrameMain(wx.Frame):  # pragma: no cover
         self.Destroy()
 
     def on_menu_about(self, event):
-        pass
+        frm =FrameAbout(self, self.GetTitle())
+        frm.ShowModal()
 
     def on_menu_documentation(self, event):
         wx.LaunchDefaultBrowser("https://rustre.readthedocs.io")
