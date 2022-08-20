@@ -104,7 +104,7 @@ class FrameMain(wx.Frame):  # pragma: no cover
         self.Destroy()
 
     def on_menu_about(self, event):
-        frm =FrameAbout(self, self.GetTitle())
+        frm = FrameAbout(self, self.GetTitle())
         frm.ShowModal()
 
     def on_menu_documentation(self, event):
@@ -201,9 +201,10 @@ class FrameMain(wx.Frame):  # pragma: no cover
 
         sbSizer3 = wx.StaticBoxSizer(wx.StaticBox(self.m_page_merge, wx.ID_ANY, u"Result"), wx.VERTICAL)
 
-        self.m_ctrl_result_union = wx.FilePickerCtrl(sbSizer3.GetStaticBox(), wx.ID_ANY, wx.EmptyString, u"Select a file",
-                                               u"*.xlsx", wx.DefaultPosition, wx.DefaultSize,
-                                               wx.FLP_SAVE | wx.FLP_USE_TEXTCTRL)
+        self.m_ctrl_result_union = wx.FilePickerCtrl(sbSizer3.GetStaticBox(), wx.ID_ANY, wx.EmptyString,
+                                                     u"Select a file",
+                                                     u"*.xlsx", wx.DefaultPosition, wx.DefaultSize,
+                                                     wx.FLP_SAVE | wx.FLP_USE_TEXTCTRL)
         sbSizer3.Add(self.m_ctrl_result_union, 0, wx.ALL | wx.EXPAND, 5)
 
         bSizer3.Add(sbSizer3, 0, wx.EXPAND | wx.ALL, 5)
@@ -215,6 +216,100 @@ class FrameMain(wx.Frame):  # pragma: no cover
         self.m_page_merge.Layout()
         bSizer3.Fit(self.m_page_merge)
         self.m_ctrl_notebook.AddPage(self.m_page_merge, u"Union", False)
+
+        self.m_page_duplicate = wx.Panel(self.m_ctrl_notebook, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize,
+                                         wx.TAB_TRAVERSAL)
+        bSizer7 = wx.BoxSizer(wx.VERTICAL)
+
+        sbSizer6 = wx.StaticBoxSizer(wx.StaticBox(self.m_page_duplicate, wx.ID_ANY, u"Input"), wx.VERTICAL)
+
+        fgSizer41 = wx.FlexGridSizer(0, 2, 0, 0)
+        fgSizer41.AddGrowableCol(1)
+        fgSizer41.SetFlexibleDirection(wx.BOTH)
+        fgSizer41.SetNonFlexibleGrowMode(wx.FLEX_GROWMODE_SPECIFIED)
+
+        self.m_staticText81 = wx.StaticText(sbSizer6.GetStaticBox(), wx.ID_ANY, u"Source file (xlsx):",
+                                            wx.DefaultPosition, wx.DefaultSize, 0)
+        self.m_staticText81.Wrap(-1)
+
+        fgSizer41.Add(self.m_staticText81, 0, wx.ALL | wx.ALIGN_CENTER_VERTICAL, 5)
+
+        self.m_ctrl_src_file_dup = wx.FilePickerCtrl(sbSizer6.GetStaticBox(), wx.ID_ANY, wx.EmptyString,
+                                                     u"Select a file", u"*.xlsx", wx.DefaultPosition, wx.DefaultSize,
+                                                     wx.FLP_DEFAULT_STYLE|wx.FLP_OPEN)
+        fgSizer41.Add(self.m_ctrl_src_file_dup, 0, wx.ALL | wx.EXPAND, 5)
+
+        self.m_staticText91 = wx.StaticText(sbSizer6.GetStaticBox(), wx.ID_ANY, u"sheet index (start at 0):",
+                                            wx.DefaultPosition, wx.DefaultSize, 0)
+        self.m_staticText91.Wrap(-1)
+
+        fgSizer41.Add(self.m_staticText91, 0, wx.ALL | wx.ALIGN_CENTER_VERTICAL, 5)
+
+        self.m_ctrl_sheet_index_dup = wx.SpinCtrl(sbSizer6.GetStaticBox(), wx.ID_ANY, wx.EmptyString,
+                                                  wx.DefaultPosition, wx.DefaultSize, wx.SP_ARROW_KEYS, 0, 10, 0)
+        fgSizer41.Add(self.m_ctrl_sheet_index_dup, 0, wx.ALL | wx.EXPAND, 5)
+
+        self.m_staticText10 = wx.StaticText(sbSizer6.GetStaticBox(), wx.ID_ANY, u"header index (start at 1):",
+                                            wx.DefaultPosition, wx.DefaultSize, 0)
+        self.m_staticText10.Wrap(-1)
+
+        fgSizer41.Add(self.m_staticText10, 0, wx.ALL | wx.ALIGN_CENTER_VERTICAL, 5)
+
+        self.m_ctrl_header_index_dup = wx.SpinCtrl(sbSizer6.GetStaticBox(), wx.ID_ANY, wx.EmptyString,
+                                                   wx.DefaultPosition, wx.DefaultSize, wx.SP_ARROW_KEYS, 1, 100, 1)
+        fgSizer41.Add(self.m_ctrl_header_index_dup, 0, wx.ALL | wx.EXPAND, 5)
+
+        self.m_staticText11 = wx.StaticText(sbSizer6.GetStaticBox(), wx.ID_ANY, u"Columns:", wx.DefaultPosition,
+                                            wx.DefaultSize, 0)
+        self.m_staticText11.Wrap(-1)
+
+        fgSizer41.Add(self.m_staticText11, 0, wx.ALL | wx.ALIGN_CENTER_VERTICAL, 5)
+
+        self.m_ctrl_columns_list_dup = wx.TextCtrl(sbSizer6.GetStaticBox(), wx.ID_ANY, wx.EmptyString,
+                                                   wx.DefaultPosition, wx.DefaultSize, 0)
+        fgSizer41.Add(self.m_ctrl_columns_list_dup, 0, wx.ALL | wx.EXPAND, 5)
+
+        fgSizer41.Add((0, 0), 1, wx.EXPAND, 5)
+
+        self.m_staticText12 = wx.StaticText(sbSizer6.GetStaticBox(), wx.ID_ANY,
+                                            u"Comma separeted list of columns index : 0,2,4", wx.DefaultPosition,
+                                            wx.DefaultSize, 0)
+        self.m_staticText12.Wrap(-1)
+
+        fgSizer41.Add(self.m_staticText12, 0, wx.ALL, 5)
+
+        sbSizer6.Add(fgSizer41, 1, wx.EXPAND, 5)
+
+        bSizer7.Add(sbSizer6, 1, wx.EXPAND | wx.ALL, 5)
+
+        sbSizer7 = wx.StaticBoxSizer(wx.StaticBox(self.m_page_duplicate, wx.ID_ANY, u"Results"), wx.VERTICAL)
+
+        bSizer8 = wx.BoxSizer(wx.HORIZONTAL)
+
+        self.m_staticText13 = wx.StaticText(sbSizer7.GetStaticBox(), wx.ID_ANY, u"Log file (xlsx)", wx.DefaultPosition,
+                                            wx.DefaultSize, 0)
+        self.m_staticText13.Wrap(-1)
+
+        bSizer8.Add(self.m_staticText13, 0, wx.ALL | wx.ALIGN_CENTER_VERTICAL, 5)
+
+        self.m_ctrl_log_file_dup = wx.FilePickerCtrl(sbSizer7.GetStaticBox(), wx.ID_ANY, wx.EmptyString,
+                                                     u"Select a file", u"*.xlsx", wx.DefaultPosition, wx.DefaultSize,
+                                                     wx.FLP_SAVE | wx.FLP_USE_TEXTCTRL)
+        bSizer8.Add(self.m_ctrl_log_file_dup, 1, wx.ALL | wx.ALIGN_CENTER_VERTICAL, 5)
+
+        sbSizer7.Add(bSizer8, 0, wx.EXPAND, 5)
+
+        bSizer7.Add(sbSizer7, 1, wx.EXPAND | wx.ALL, 5)
+
+        self.m_btn_duplicates = wx.Button(self.m_page_duplicate, wx.ID_ANY, u"Search duplicates", wx.DefaultPosition,
+                                          wx.DefaultSize, 0)
+        bSizer7.Add(self.m_btn_duplicates, 0, wx.ALL, 5)
+
+        self.m_page_duplicate.SetSizer(bSizer7)
+        self.m_page_duplicate.Layout()
+        bSizer7.Fit(self.m_page_duplicate)
+        self.m_ctrl_notebook.AddPage(self.m_page_duplicate, u"Duplicates", True)
+
         self.m_page_compare = wx.Panel(self.m_ctrl_notebook, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize,
                                        wx.TAB_TRAVERSAL)
         bSizer17 = wx.BoxSizer(wx.VERTICAL)
@@ -300,5 +395,7 @@ class FrameMain(wx.Frame):  # pragma: no cover
         self.SetSizer(bSizer1)
         self.Layout()
         bSizer1.Fit(self)
+
+        self.m_ctrl_notebook.SetSelection(0)
 
         self.Centre(wx.BOTH)
