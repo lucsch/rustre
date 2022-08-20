@@ -4,6 +4,7 @@ import pathlib
 import wx
 from rustre.xlsxmerge import XlsxMerge
 from rustre.xlsxcompare import XlsxCompare
+from rustre.xlsxduplicate import XlsxDuplicate
 from rustre.version import COMMIT_ID
 from rustre.version import COMMIT_NUMBER
 from rustre.version import VERSION_MAJOR_MINOR
@@ -30,6 +31,7 @@ class FrameMain(wx.Frame):  # pragma: no cover
         self.Bind(wx.EVT_BUTTON, self.on_button_clear, id=self.m_btn_clear.GetId())
         self.Bind(wx.EVT_BUTTON, self.on_button_merge, id=self.m_btn_do_merge.GetId())
         self.Bind(wx.EVT_BUTTON, self.on_button_compare, id=self.m_btn_compare.GetId())
+        self.Bind(wx.EVT_BUTTON, self.on_button_duplicates, id=self.m_btn_duplicates.GetId())
         self.Bind(wx.EVT_MENU, self.on_menu_exit, id=self.m_menu_item_exit.GetId())
         self.Bind(wx.EVT_MENU, self.on_menu_about, id=self.m_menu_item_about.GetId())
         self.Bind(wx.EVT_MENU, self.on_menu_documentation, id=self.m_menu_item_doc.GetId())
@@ -65,6 +67,21 @@ class FrameMain(wx.Frame):  # pragma: no cover
             wx.LogError("Merging failed!")
             return
         wx.LogMessage("Merging done!")
+
+    def on_button_duplicates(self, event):
+        # get cols
+        cols_str = self.m_ctrl_columns_list_dup.GetValue()
+        if cols_str == "":
+            wx.LogError("Error, no columns defined!")
+            return
+        col_arr = cols_str.split(",")
+        xdup = XlsxDuplicate(self.m_ctrl_src_file_dup.GetPath(), self.m_ctrl_log_file_dup.GetPath(),
+                             col_arr, self.m_ctrl_sheet_index_dup.GetValue(),
+                             self.m_ctrl_header_index_dup.GetValue())
+        if not xdup.check_duplicate():
+            wx.LogError("Error checking duplicates... check your data!")
+            return
+        wx.LogMessage("Checking duplicate done!")
 
     def on_button_compare(self, event):
         my_ref_path = self.m_ctrl_reference.GetPath()

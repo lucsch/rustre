@@ -12,11 +12,12 @@ class XlsxDuplicate:
     def __init__(self, src_filename :str, log_filename :str, cols :[], sheet_index=0, header_index=1):
         self.m_src_filename = src_filename
         self.m_log_filename = log_filename
-        self.m_cols = cols
+        # convert cols to int
+        self.m_cols = [int(i) for i in cols]
         self.m_sheet_index = sheet_index
         self.m_header_index = header_index
 
-    def _is_valid(self) -> bool:
+    def is_valid(self) -> bool:
         if not os.path.exists(self.m_src_filename):
             return False
         if self.m_log_filename == "":
@@ -26,7 +27,7 @@ class XlsxDuplicate:
         return True
 
     def check_duplicate(self) -> bool:
-        if not self._is_valid():
+        if not self.is_valid():
             return False
 
         # open source file
