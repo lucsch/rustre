@@ -8,3 +8,4 @@ coveralls
 wxPython
 flake8
 pyinstaller
+pandas

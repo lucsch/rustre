@@ -1,9 +1,10 @@
-openpyxl==3.0.10
-pytest==7.1.2
-Sphinx==5.1.1
-myst-parser==0.18.0
-sphinx-rtd-theme==1.0.0
-pytest-cov==3.0.0
+openpyxl==3.1.1
+pytest==7.2.1
+Sphinx==5.3.0
+myst-parser==0.18.1
+sphinx-rtd-theme==1.2.0
+pytest-cov==4.0.0
 coveralls==3.3.1
-flake8==5.0.4
+flake8==6.0.0
+pandas==1.5.3
 https://extras.wxpython.org/wxPython4/extras/linux/gtk3/ubuntu-20.04/wxPython-4.2.0-cp38-cp38-linux_x86_64.whl

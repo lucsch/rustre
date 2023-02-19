@@ -6,3 +6,4 @@ sphinx_rtd_theme
 pytest-cov
 coveralls
 flake8
+pandas
