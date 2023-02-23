@@ -253,7 +253,7 @@ class FrameMain(wx.Frame):  # pragma: no cover
 
         self.m_ctrl_src_file_dup = wx.FilePickerCtrl(sbSizer6.GetStaticBox(), wx.ID_ANY, wx.EmptyString,
                                                      u"Select a file", u"*.xlsx", wx.DefaultPosition, wx.DefaultSize,
-                                                     wx.FLP_DEFAULT_STYLE|wx.FLP_OPEN)
+                                                     wx.FLP_DEFAULT_STYLE | wx.FLP_OPEN)
         fgSizer41.Add(self.m_ctrl_src_file_dup, 0, wx.ALL | wx.EXPAND, 5)
 
         self.m_staticText91 = wx.StaticText(sbSizer6.GetStaticBox(), wx.ID_ANY, u"sheet index (start at 0):",
@@ -401,6 +401,144 @@ class FrameMain(wx.Frame):  # pragma: no cover
         self.m_page_compare.Layout()
         bSizer17.Fit(self.m_page_compare)
         self.m_ctrl_notebook.AddPage(self.m_page_compare, u"People", False)
+
+        self.m_page_join = wx.Panel(self.m_ctrl_notebook, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize,
+                                    wx.TAB_TRAVERSAL)
+        bSizer9 = wx.BoxSizer(wx.VERTICAL)
+
+        sbSizer8 = wx.StaticBoxSizer(wx.StaticBox(self.m_page_join, wx.ID_ANY, u"First file"), wx.VERTICAL)
+
+        fgSizer42 = wx.FlexGridSizer(0, 2, 0, 0)
+        fgSizer42.AddGrowableCol(1)
+        fgSizer42.SetFlexibleDirection(wx.BOTH)
+        fgSizer42.SetNonFlexibleGrowMode(wx.FLEX_GROWMODE_SPECIFIED)
+
+        self.m_staticText131 = wx.StaticText(sbSizer8.GetStaticBox(), wx.ID_ANY, u"File", wx.DefaultPosition,
+                                             wx.DefaultSize, 0)
+        self.m_staticText131.Wrap(-1)
+
+        fgSizer42.Add(self.m_staticText131, 0, wx.ALL | wx.ALIGN_CENTER_VERTICAL, 5)
+
+        self.m_ctrl_join_file1 = wx.FilePickerCtrl(sbSizer8.GetStaticBox(), wx.ID_ANY, wx.EmptyString, u"Select a file",
+                                                   u"*.*", wx.DefaultPosition, wx.DefaultSize,
+                                                   wx.FLP_DEFAULT_STYLE | wx.FLP_USE_TEXTCTRL)
+        fgSizer42.Add(self.m_ctrl_join_file1, 0, wx.ALL | wx.EXPAND | wx.ALIGN_CENTER_VERTICAL, 5)
+
+        self.m_staticText14 = wx.StaticText(sbSizer8.GetStaticBox(), wx.ID_ANY, u"Sheet", wx.DefaultPosition,
+                                            wx.DefaultSize, 0)
+        self.m_staticText14.Wrap(-1)
+
+        fgSizer42.Add(self.m_staticText14, 0, wx.ALL | wx.ALIGN_CENTER_VERTICAL, 5)
+
+        self.m_ctrl_join_sheet1 = wx.SpinCtrl(sbSizer8.GetStaticBox(), wx.ID_ANY, wx.EmptyString, wx.DefaultPosition,
+                                              wx.DefaultSize, wx.SP_ARROW_KEYS, 0, 20, 0)
+        fgSizer42.Add(self.m_ctrl_join_sheet1, 0, wx.ALL | wx.EXPAND, 5)
+
+        self.m_staticText15 = wx.StaticText(sbSizer8.GetStaticBox(), wx.ID_ANY, u"Skip rows", wx.DefaultPosition,
+                                            wx.DefaultSize, 0)
+        self.m_staticText15.Wrap(-1)
+
+        fgSizer42.Add(self.m_staticText15, 0, wx.ALL | wx.ALIGN_CENTER_VERTICAL, 5)
+
+        self.m_ctrl_join_row1 = wx.SpinCtrl(sbSizer8.GetStaticBox(), wx.ID_ANY, wx.EmptyString, wx.DefaultPosition,
+                                            wx.DefaultSize, wx.SP_ARROW_KEYS, 0, 50, 0)
+        fgSizer42.Add(self.m_ctrl_join_row1, 0, wx.ALL | wx.EXPAND, 5)
+
+        self.m_staticText16 = wx.StaticText(sbSizer8.GetStaticBox(), wx.ID_ANY, u"Id column index", wx.DefaultPosition,
+                                            wx.DefaultSize, 0)
+        self.m_staticText16.Wrap(-1)
+
+        fgSizer42.Add(self.m_staticText16, 0, wx.ALL | wx.ALIGN_CENTER_VERTICAL, 5)
+
+        self.m_ctrl_join_id1 = wx.SpinCtrl(sbSizer8.GetStaticBox(), wx.ID_ANY, wx.EmptyString, wx.DefaultPosition,
+                                           wx.DefaultSize, wx.SP_ARROW_KEYS, 0, 1000, 0)
+        fgSizer42.Add(self.m_ctrl_join_id1, 0, wx.ALL | wx.EXPAND | wx.ALIGN_CENTER_VERTICAL, 5)
+
+        sbSizer8.Add(fgSizer42, 1, wx.EXPAND, 5)
+
+        bSizer9.Add(sbSizer8, 1, wx.EXPAND | wx.ALL, 5)
+
+        sbSizer9 = wx.StaticBoxSizer(wx.StaticBox(self.m_page_join, wx.ID_ANY, u"Second file"), wx.VERTICAL)
+
+        fgSizer5 = wx.FlexGridSizer(0, 2, 0, 0)
+        fgSizer5.AddGrowableCol(1)
+        fgSizer5.SetFlexibleDirection(wx.BOTH)
+        fgSizer5.SetNonFlexibleGrowMode(wx.FLEX_GROWMODE_SPECIFIED)
+
+        self.m_staticText17 = wx.StaticText(sbSizer9.GetStaticBox(), wx.ID_ANY, u"File", wx.DefaultPosition,
+                                            wx.DefaultSize, 0)
+        self.m_staticText17.Wrap(-1)
+
+        fgSizer5.Add(self.m_staticText17, 0, wx.ALL | wx.ALIGN_CENTER_VERTICAL, 5)
+
+        self.m_ctrl_join_file2 = wx.FilePickerCtrl(sbSizer9.GetStaticBox(), wx.ID_ANY, wx.EmptyString, u"Select a file",
+                                                   u"*.*", wx.DefaultPosition, wx.DefaultSize,
+                                                   wx.FLP_DEFAULT_STYLE | wx.FLP_USE_TEXTCTRL)
+        fgSizer5.Add(self.m_ctrl_join_file2, 0, wx.ALL | wx.EXPAND, 5)
+
+        self.m_staticText18 = wx.StaticText(sbSizer9.GetStaticBox(), wx.ID_ANY, u"Sheet", wx.DefaultPosition,
+                                            wx.DefaultSize, 0)
+        self.m_staticText18.Wrap(-1)
+
+        fgSizer5.Add(self.m_staticText18, 0, wx.ALL | wx.ALIGN_CENTER_VERTICAL, 5)
+
+        self.m_ctrl_join_sheet2 = wx.SpinCtrl(sbSizer9.GetStaticBox(), wx.ID_ANY, wx.EmptyString, wx.DefaultPosition,
+                                              wx.DefaultSize, wx.SP_ARROW_KEYS, 0, 20, 0)
+        fgSizer5.Add(self.m_ctrl_join_sheet2, 0, wx.ALL | wx.ALIGN_CENTER_VERTICAL | wx.EXPAND, 5)
+
+        self.m_staticText19 = wx.StaticText(sbSizer9.GetStaticBox(), wx.ID_ANY, u"Skip rows", wx.DefaultPosition,
+                                            wx.DefaultSize, 0)
+        self.m_staticText19.Wrap(-1)
+
+        fgSizer5.Add(self.m_staticText19, 0, wx.ALL | wx.ALIGN_CENTER_VERTICAL, 5)
+
+        self.m_ctrl_join_row2 = wx.SpinCtrl(sbSizer9.GetStaticBox(), wx.ID_ANY, wx.EmptyString, wx.DefaultPosition,
+                                            wx.DefaultSize, wx.SP_ARROW_KEYS, 0, 50, 0)
+        fgSizer5.Add(self.m_ctrl_join_row2, 0, wx.ALL | wx.EXPAND, 5)
+
+        self.m_staticText20 = wx.StaticText(sbSizer9.GetStaticBox(), wx.ID_ANY, u"Id column index", wx.DefaultPosition,
+                                            wx.DefaultSize, 0)
+        self.m_staticText20.Wrap(-1)
+
+        fgSizer5.Add(self.m_staticText20, 0, wx.ALL | wx.ALIGN_CENTER_VERTICAL, 5)
+
+        self.m_ctrl_join_id2 = wx.SpinCtrl(sbSizer9.GetStaticBox(), wx.ID_ANY, wx.EmptyString, wx.DefaultPosition,
+                                           wx.DefaultSize, wx.SP_ARROW_KEYS, 0, 1000, 0)
+        fgSizer5.Add(self.m_ctrl_join_id2, 0, wx.ALL | wx.EXPAND, 5)
+
+        sbSizer9.Add(fgSizer5, 1, wx.EXPAND, 5)
+
+        bSizer9.Add(sbSizer9, 1, wx.EXPAND | wx.ALL, 5)
+
+        sbSizer101 = wx.StaticBoxSizer(wx.StaticBox(self.m_page_join, wx.ID_ANY, u"Results"), wx.VERTICAL)
+
+        fgSizer6 = wx.FlexGridSizer(0, 2, 0, 0)
+        fgSizer6.AddGrowableCol(1)
+        fgSizer6.SetFlexibleDirection(wx.BOTH)
+        fgSizer6.SetNonFlexibleGrowMode(wx.FLEX_GROWMODE_SPECIFIED)
+
+        self.m_staticText21 = wx.StaticText(sbSizer101.GetStaticBox(), wx.ID_ANY, u"Result", wx.DefaultPosition,
+                                            wx.DefaultSize, 0)
+        self.m_staticText21.Wrap(-1)
+
+        fgSizer6.Add(self.m_staticText21, 0, wx.ALL | wx.ALIGN_CENTER_VERTICAL, 5)
+
+        self.m_ctrl_join_result = wx.FilePickerCtrl(sbSizer101.GetStaticBox(), wx.ID_ANY, wx.EmptyString,
+                                                    u"Select a file", u"*.*", wx.DefaultPosition, wx.DefaultSize,
+                                                    wx.FLP_SAVE | wx.FLP_USE_TEXTCTRL)
+        fgSizer6.Add(self.m_ctrl_join_result, 0, wx.ALL | wx.EXPAND, 5)
+
+        sbSizer101.Add(fgSizer6, 1, wx.EXPAND, 5)
+
+        bSizer9.Add(sbSizer101, 0, wx.EXPAND | wx.ALL, 5)
+
+        self.m_ctrl_join_btn = wx.Button(self.m_page_join, wx.ID_ANY, u"Join", wx.DefaultPosition, wx.DefaultSize, 0)
+        bSizer9.Add(self.m_ctrl_join_btn, 0, wx.ALL, 5)
+
+        self.m_page_join.SetSizer(bSizer9)
+        self.m_page_join.Layout()
+        bSizer9.Fit(self.m_page_join)
+        self.m_ctrl_notebook.AddPage(self.m_page_join, u"Join", True)
 
         bSizer15.Add(self.m_ctrl_notebook, 1, wx.EXPAND | wx.ALL, 5)
 
