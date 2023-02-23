@@ -1,13 +1,15 @@
 import platform
 
 import wx
+import pandas as pd
+import openpyxl as op
 
 from rustre.bitmap import rustre_icon
 from rustre.version import BRANCH_NAME
 from rustre.version import COMMIT_ID
 from rustre.version import COMMIT_NUMBER
 from rustre.version import VERSION_MAJOR_MINOR
-from openpyxl import __version__
+
 
 
 class FrameAbout(wx.Dialog):  # pragma: no cover
@@ -22,7 +24,8 @@ class FrameAbout(wx.Dialog):  # pragma: no cover
         self.m_textCtrl3.AppendText("Commit id: " + COMMIT_ID + "\n")
         self.m_textCtrl3.AppendText("Commit number: " + COMMIT_NUMBER + "\n")
         self.m_textCtrl3.AppendText("Branch: " + BRANCH_NAME + "\n")
-        self.m_textCtrl3.AppendText("Openpyxl: " + __version__ + "\n")
+        self.m_textCtrl3.AppendText("Openpyxl: " + op.__version__ + "\n")
+        self.m_textCtrl3.AppendText("Pandas: " + pd.__version__ + "\n")
         self.m_textCtrl3.AppendText("Python: " + platform.python_version() + "\n")
         self.m_textCtrl3.AppendText("wxWidgets: " + wx.version())
         self.m_btn_cancel.SetFocus()
