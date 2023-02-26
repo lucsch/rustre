@@ -5,6 +5,7 @@ import wx
 from rustre.xlsxmerge import XlsxMerge
 from rustre.xlsxcompare import XlsxCompare
 from rustre.xlsxduplicate import XlsxDuplicate
+from rustre.xlsxjoin import XlsxJoin
 from rustre.version import COMMIT_ID
 from rustre.version import COMMIT_NUMBER
 from rustre.version import VERSION_MAJOR_MINOR
@@ -32,6 +33,7 @@ class FrameMain(wx.Frame):  # pragma: no cover
         self.Bind(wx.EVT_BUTTON, self.on_button_merge, id=self.m_btn_do_merge.GetId())
         self.Bind(wx.EVT_BUTTON, self.on_button_compare, id=self.m_btn_compare.GetId())
         self.Bind(wx.EVT_BUTTON, self.on_button_duplicates, id=self.m_btn_duplicates.GetId())
+        self.Bind(wx.EVT_BUTTON, self.on_button_join, id=self.m_btn_join.GetId())
         self.Bind(wx.EVT_MENU, self.on_menu_exit, id=self.m_menu_item_exit.GetId())
         self.Bind(wx.EVT_MENU, self.on_menu_about, id=self.m_menu_item_about.GetId())
         self.Bind(wx.EVT_MENU, self.on_menu_documentation, id=self.m_menu_item_doc.GetId())
@@ -82,6 +84,30 @@ class FrameMain(wx.Frame):  # pragma: no cover
             wx.LogError("Error checking duplicates... check your data!")
             return
         wx.LogMessage("Checking duplicate done!")
+
+    def _check_join_panel(self) -> bool:
+        if self.m_ctrl_join_file1.GetPath() == "" or not os.path.exists(self.m_ctrl_join_file1.GetPath()):
+            return False
+        if self.m_ctrl_join_file2.GetPath() == "" or not os.path.exists(self.m_ctrl_join_file2.GetPath()):
+            return False
+        if self.m_ctrl_join_result.GetPath() == "":
+            return False
+        return True
+
+    def on_button_join(self, event):
+        if self._check_join_panel() is False:
+            return
+
+        join_obj = XlsxJoin(self.m_ctrl_join_file1.GetPath(), base_header=self.m_ctrl_join_row1.GetValue(),
+                            base_sheet=self.m_ctrl_join_sheet1.GetValue())
+        if not join_obj.join(second_file=self.m_ctrl_join_file2.GetPath(),
+                             second_header=self.m_ctrl_join_row2.GetValue(),
+                             second_sheet=self.m_ctrl_join_sheet2.GetValue(),
+                             base_column=self.m_ctrl_join_id1.GetValue(),
+                             second_col=self.m_ctrl_join_id2.GetValue(), out_file=self.m_ctrl_join_result.GetPath()):
+            wx.LogError("Joining failed!")
+            return
+        wx.LogMessage("Joining done !")
 
     def on_button_compare(self, event):
         my_ref_path = self.m_ctrl_reference.GetPath()
@@ -420,7 +446,7 @@ class FrameMain(wx.Frame):  # pragma: no cover
         fgSizer42.Add(self.m_staticText131, 0, wx.ALL | wx.ALIGN_CENTER_VERTICAL, 5)
 
         self.m_ctrl_join_file1 = wx.FilePickerCtrl(sbSizer8.GetStaticBox(), wx.ID_ANY, wx.EmptyString, u"Select a file",
-                                                   u"*.*", wx.DefaultPosition, wx.DefaultSize,
+                                                   u"*.xlsx", wx.DefaultPosition, wx.DefaultSize,
                                                    wx.FLP_DEFAULT_STYLE | wx.FLP_USE_TEXTCTRL)
         fgSizer42.Add(self.m_ctrl_join_file1, 0, wx.ALL | wx.EXPAND | wx.ALIGN_CENTER_VERTICAL, 5)
 
@@ -472,7 +498,7 @@ class FrameMain(wx.Frame):  # pragma: no cover
         fgSizer5.Add(self.m_staticText17, 0, wx.ALL | wx.ALIGN_CENTER_VERTICAL, 5)
 
         self.m_ctrl_join_file2 = wx.FilePickerCtrl(sbSizer9.GetStaticBox(), wx.ID_ANY, wx.EmptyString, u"Select a file",
-                                                   u"*.*", wx.DefaultPosition, wx.DefaultSize,
+                                                   u"*.xlsx", wx.DefaultPosition, wx.DefaultSize,
                                                    wx.FLP_DEFAULT_STYLE | wx.FLP_USE_TEXTCTRL)
         fgSizer5.Add(self.m_ctrl_join_file2, 0, wx.ALL | wx.EXPAND, 5)
 
@@ -532,8 +558,8 @@ class FrameMain(wx.Frame):  # pragma: no cover
 
         bSizer9.Add(sbSizer101, 0, wx.EXPAND | wx.ALL, 5)
 
-        self.m_ctrl_join_btn = wx.Button(self.m_page_join, wx.ID_ANY, u"Join", wx.DefaultPosition, wx.DefaultSize, 0)
-        bSizer9.Add(self.m_ctrl_join_btn, 0, wx.ALL, 5)
+        self.m_btn_join = wx.Button(self.m_page_join, wx.ID_ANY, u"Join", wx.DefaultPosition, wx.DefaultSize, 0)
+        bSizer9.Add(self.m_btn_join, 0, wx.ALL, 5)
 
         self.m_page_join.SetSizer(bSizer9)
         self.m_page_join.Layout()
