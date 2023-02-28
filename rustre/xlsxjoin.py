@@ -31,5 +31,4 @@ class XlsxJoin:
 
     def _get_dataframe(self, xlsx_file: str, no_sheet: int, no_header: int) -> pd.DataFrame:
         df = pd.read_excel(xlsx_file, sheet_name=no_sheet, header=no_header)
-        print(df)
         return df
