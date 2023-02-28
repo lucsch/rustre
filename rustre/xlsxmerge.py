@@ -1,6 +1,10 @@
 #!/usr/bin/env python3
 import logging
+import pandas as pd
 from pathlib import Path
+
+import wx
+
 from rustre.xlsxfile import XlsxFile
 
 
@@ -17,7 +21,7 @@ class XlsxMerge:
             :ValueError: if source_files is None or empty
     """
 
-    def __init__(self, source_files, sheet_index=0, header_index=1):
+    def __init__(self, source_files, sheet_index=0, header_index=0):
         """Constructor"""
         self.m_source_files = source_files
         self.m_sheet_index = sheet_index
@@ -28,6 +32,18 @@ class XlsxMerge:
             if Path(f).suffix != ".xlsx":
                 raise ValueError("Wrong extension found")
 
+    @staticmethod
+    def is_headers_equal(base_df: pd.DataFrame, second_df: pd.DataFrame) -> bool:
+        diff_cols = base_df.columns.difference(second_df.columns)
+        diff_cols2 = second_df.columns.difference(base_df.columns)
+        if len(diff_cols) == 0 and len(diff_cols2) == 0:
+            return True
+        if len(diff_cols) != 0:
+            wx.LogError("Headers mismatch in first file, column: {}".format(",".join(diff_cols)))
+        if len(diff_cols2) != 0:
+            wx.LogError("Headers mismatch in other file, column: {}".format(",".join(diff_cols2)))
+        return False
+
     def merge(self, result_file):
         """Merge the files into the result file
 
@@ -36,34 +52,20 @@ class XlsxMerge:
             :return: True if the merge is successful, False otherwise
             :rtype: bool
         """
-        # compare headers
-        xlsx1 = XlsxFile(self.m_source_files[0], self.m_sheet_index, load_in_memory=False)
-        header_xlsx1 = xlsx1.get_columns(self.m_header_index)
+        # compare headers and merge
+        df = pd.DataFrame()
+        df1 = pd.read_excel(self.m_source_files[0], sheet_name=self.m_sheet_index, header=self.m_header_index)
+        df = df.append(df1)
         for index in range(1, len(self.m_source_files)):
-            xlsx2 = XlsxFile(self.m_source_files[index], self.m_sheet_index, load_in_memory=False)
-            header_xlsx2 = xlsx2.get_columns(self.m_header_index)
-            if header_xlsx1 != header_xlsx2:
-                logging.error("Xlsx headers are not equal")
-                logging.error("Header1 : {}".format(header_xlsx1))
-                logging.error("Header2 : {}".format(header_xlsx2))
+            df_iter = pd.read_excel(self.m_source_files[index], sheet_name=self.m_sheet_index, header=self.m_header_index)
+            if not self.is_headers_equal(df1, df_iter):
+                wx.LogError("Column mismatch")
                 return False
+            df = df.append(df_iter)
 
-        # merge first file in the new filename
+        # try to create the output file
         if not XlsxFile.create_file(result_file):
             return False
 
-        xlsx_result = XlsxFile(result_file)
-        xlsx_source1 = XlsxFile(self.m_source_files[0], self.m_sheet_index, load_in_memory=True)
-        m_row_tot = xlsx_source1.get_row_count()
-        for r in range(self.m_header_index, m_row_tot + 1):
-            my_row = xlsx_source1.get_columns(r)
-            xlsx_result.append_row(my_row)
-
-        # merge the other files
-        for index in range(1, len(self.m_source_files)):
-            xlsx_src = XlsxFile(self.m_source_files[index], self.m_sheet_index, load_in_memory=True)
-            for r in range(self.m_header_index + 1, xlsx_src.get_row_count() + 1):
-                my_row = xlsx_src.get_columns(r)
-                xlsx_result.append_row(my_row)
-        xlsx_result.save()
+        df.to_excel(result_file, index=False)
         return True

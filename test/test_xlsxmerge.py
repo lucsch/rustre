@@ -3,7 +3,7 @@
 import os
 
 import pytest
-
+import pandas as pd
 from .context import rustre
 from .context import UNIT_TEST_PATH_OUTPUT
 from .context import UNIT_TEST_PATH
@@ -46,3 +46,20 @@ def test_init_failed_wrong_format(get_test_files):
     with pytest.raises(ValueError):
         xmerge = rustre.xlsxmerge.XlsxMerge([get_test_files[0], wrong_file, get_test_files[1]])
 
+
+def test_headers_equal(get_test_files):
+    df1 = pd.read_excel(get_test_files[0], sheet_name=0, header=0)
+    df2 = pd.read_excel(get_test_files[1], sheet_name=0, header=0)
+    assert rustre.XlsxMerge.is_headers_equal(base_df=df1, second_df=df2)
+
+
+def test_header_differs(get_test_files):
+    df1 = pd.read_excel(get_test_files[0], sheet_name=0, header=0)
+    df2 = pd.read_excel(os.path.join(UNIT_TEST_PATH, "test_join1.xlsx"), sheet_name=0, header=2)
+    assert rustre.XlsxMerge.is_headers_equal(df1, df2) is False
+
+
+def test_header_differs2(get_test_files):
+    df1 = pd.read_excel(get_test_files[0], sheet_name=0, header=0)
+    df2 = pd.read_excel(os.path.join(UNIT_TEST_PATH, "test_compare_src.xlsx"), sheet_name=0, header=0)
+    assert rustre.XlsxMerge.is_headers_equal(df1, df2) is False
