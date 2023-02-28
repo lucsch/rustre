@@ -96,6 +96,7 @@ class FrameMain(wx.Frame):  # pragma: no cover
 
     def on_button_join(self, event):
         if self._check_join_panel() is False:
+            wx.LogError("Please fill all fields before joining...")
             return
 
         join_obj = XlsxJoin(self.m_ctrl_join_file1.GetPath(), base_header=self.m_ctrl_join_row1.GetValue(),
@@ -460,7 +461,7 @@ class FrameMain(wx.Frame):  # pragma: no cover
                                               wx.DefaultSize, wx.SP_ARROW_KEYS, 0, 20, 0)
         fgSizer42.Add(self.m_ctrl_join_sheet1, 0, wx.ALL | wx.EXPAND, 5)
 
-        self.m_staticText15 = wx.StaticText(sbSizer8.GetStaticBox(), wx.ID_ANY, u"Skip rows", wx.DefaultPosition,
+        self.m_staticText15 = wx.StaticText(sbSizer8.GetStaticBox(), wx.ID_ANY, u"Header rows", wx.DefaultPosition,
                                             wx.DefaultSize, 0)
         self.m_staticText15.Wrap(-1)
 
@@ -512,7 +513,7 @@ class FrameMain(wx.Frame):  # pragma: no cover
                                               wx.DefaultSize, wx.SP_ARROW_KEYS, 0, 20, 0)
         fgSizer5.Add(self.m_ctrl_join_sheet2, 0, wx.ALL | wx.ALIGN_CENTER_VERTICAL | wx.EXPAND, 5)
 
-        self.m_staticText19 = wx.StaticText(sbSizer9.GetStaticBox(), wx.ID_ANY, u"Skip rows", wx.DefaultPosition,
+        self.m_staticText19 = wx.StaticText(sbSizer9.GetStaticBox(), wx.ID_ANY, u"Header rows", wx.DefaultPosition,
                                             wx.DefaultSize, 0)
         self.m_staticText19.Wrap(-1)
 

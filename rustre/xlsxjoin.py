@@ -25,10 +25,11 @@ class XlsxJoin:
 
         df1 = self._get_dataframe(self.m_base_xlsx_file, self.m_base_sheet, self.m_base_header)
         df2 = self._get_dataframe(second_file, second_sheet, second_header)
-        df_merge = pd.merge(df1, df2, on=[df1.columns[base_column], df2.columns[second_col]], how="outer")
+        df_merge = pd.merge(df1, df2, left_on=df1.columns[base_column], right_on=df2.columns[second_col], how="outer")
         df_merge.to_excel(out_file)
         return True
 
     def _get_dataframe(self, xlsx_file: str, no_sheet: int, no_header: int) -> pd.DataFrame:
         df = pd.read_excel(xlsx_file, sheet_name=no_sheet, header=no_header)
+        print(df)
         return df
