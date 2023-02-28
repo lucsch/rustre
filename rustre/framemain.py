@@ -229,14 +229,14 @@ class FrameMain(wx.Frame):  # pragma: no cover
                                         wx.DefaultSize, wx.SP_ARROW_KEYS, 0, 20, 0)
         fgSizer1.Add(self.m_ctrl_sheet, 0, wx.ALL | wx.ALIGN_CENTER_VERTICAL | wx.EXPAND, 5)
 
-        self.m_staticText2 = wx.StaticText(sbSizer2.GetStaticBox(), wx.ID_ANY, u"header index (start at 1):",
+        self.m_staticText2 = wx.StaticText(sbSizer2.GetStaticBox(), wx.ID_ANY, u"header index (zero based):",
                                            wx.DefaultPosition, wx.DefaultSize, 0)
         self.m_staticText2.Wrap(-1)
 
         fgSizer1.Add(self.m_staticText2, 0, wx.ALL | wx.ALIGN_CENTER_VERTICAL, 5)
 
         self.m_ctrl_header = wx.SpinCtrl(sbSizer2.GetStaticBox(), wx.ID_ANY, wx.EmptyString, wx.DefaultPosition,
-                                         wx.DefaultSize, wx.SP_ARROW_KEYS, 1, 100, 1)
+                                         wx.DefaultSize, wx.SP_ARROW_KEYS, 0, 100, 0)
         fgSizer1.Add(self.m_ctrl_header, 0, wx.ALL | wx.EXPAND | wx.ALIGN_CENTER_VERTICAL, 5)
 
         sbSizer2.Add(fgSizer1, 1, wx.EXPAND, 5)

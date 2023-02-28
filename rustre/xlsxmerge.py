@@ -57,7 +57,8 @@ class XlsxMerge:
         df1 = pd.read_excel(self.m_source_files[0], sheet_name=self.m_sheet_index, header=self.m_header_index)
         df = df.append(df1)
         for index in range(1, len(self.m_source_files)):
-            df_iter = pd.read_excel(self.m_source_files[index], sheet_name=self.m_sheet_index, header=self.m_header_index)
+            df_iter = pd.read_excel(self.m_source_files[index], sheet_name=self.m_sheet_index,
+                                    header=self.m_header_index)
             if not self.is_headers_equal(df1, df_iter):
                 wx.LogError("Column mismatch")
                 return False
