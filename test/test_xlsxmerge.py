@@ -29,6 +29,16 @@ def test_merge_two_files(get_test_files):
     assert xlsx.get_row_count() == 11
 
 
+def test_merge_three_files(get_test_files):
+    list_files = get_test_files
+    list_files.append(get_test_files[0])
+    assert len(list_files) == 3
+    xmerge = rustre.xlsxmerge.XlsxMerge(list_files)
+    out_file = os.path.join(UNIT_TEST_PATH_OUTPUT, "test_merge3.xlsx")
+    assert xmerge.merge(out_file)
+    xlsx = rustre.xlsxfile.XlsxFile(out_file)
+    assert xlsx.get_row_count() == 16
+
 def test_merge_headers_differs(get_test_files):
     xmerge = rustre.xlsxmerge.XlsxMerge([get_test_files[0], os.path.join(UNIT_TEST_PATH, "test_compare_src.xlsx")])
     out_file = os.path.join(UNIT_TEST_PATH_OUTPUT, "test_merge2.xlsx")
