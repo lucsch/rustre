@@ -40,6 +40,7 @@ jobs:
       run: |
         cd install
         python createapp.py OSX False
+        python createdmg.py rustre ../bin/dist ../bin 
         cd ..
 
     - name: Upload

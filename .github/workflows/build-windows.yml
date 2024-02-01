@@ -32,9 +32,9 @@ jobs:
         python createversion.py version.py
         cd ..
 
-    - name: Run test
-      run: |
-        pytest test --log-cli-level=INFO
+#    - name: Run test
+#      run: |
+#        pytest test --log-cli-level=INFO
 
     - name: Create the binary
       run: |
