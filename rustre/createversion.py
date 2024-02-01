@@ -12,7 +12,7 @@ class GitVersion:
     def __init__(self, ):
 
         # Change this var when changing between major / minor version!
-        self.VERSION_MAJOR_MINOR = "1.0"
+        self.VERSION_MAJOR_MINOR = "1.2"
 
         self.m_commit_id = self.__compute_git_command(["git", "describe", "--always", "--dirty=+"])[:-1].decode("utf-8")
         self.m_commit_number = self.__compute_git_command(["git", "rev-list", "HEAD", "--count"])[:-1].decode("utf-8")
