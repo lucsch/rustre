@@ -6,6 +6,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [v1.2.117] - 2024-02-01
+
+### Added
+
+- Add code to automatically delete duplicates (#6)
+- Add a help button on each tab (#8)
+
+### Changed
+
+- Improving documentation (#7)
+- bumping libraries to latest version
+- improved continuous integration
+
 ## [v1.1.101] - 2023-02-28
 
 ### Added

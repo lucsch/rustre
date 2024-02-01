@@ -1,4 +1,4 @@
-name: OSX build (Intel)
+name: Build macOS (Intel)
 
 on:
   push:
@@ -8,7 +8,7 @@ on:
 
 jobs:
   build:
-    name: OSX intel build
+    name: Build macOS
     runs-on: macos-11
 
     steps:

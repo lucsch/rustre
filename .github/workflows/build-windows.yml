@@ -47,7 +47,8 @@ jobs:
       with:
         path: |
           ${{github.workspace}}/bin/*.exe
-          ${{github.workspace}}/bin/*.zip
+          ${{github.workspace}}/bin/dist/*.exe
+          ${{github.workspace}}/*.exe
 
   upload_all:
     name: Upload if release
