@@ -39,7 +39,7 @@ jobs:
     - name: Create the binary
       run: |
         cd install
-        python createapp.py Windows False
+        python createapp.py Windows --no-bundled
         cd ..
 
     - name: Upload

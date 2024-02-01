@@ -39,7 +39,7 @@ jobs:
     - name: Create the binary
       run: |
         cd install
-        python createapp.py OSX False
+        python createapp.py OSX --bundled
         python createdmg.py rustre ../bin/dist ../bin 
         cd ..
 

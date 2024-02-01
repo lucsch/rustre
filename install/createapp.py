@@ -30,6 +30,7 @@ class CreateApp(object):
         self.iconfile = os.path.join(self.basepath, "art", self._get_icon())
         self.m_commit_number = ""
         self.m_bundled = bundled
+        print(self.m_bundled)
 
     def _get_icon(self):
         """return the icon based on the plateform"""
@@ -113,10 +114,11 @@ class CreateApp(object):
 ##########################################################
 # Main function, parse command line arguments
 ##########################################################
+# use --bundled version on OSX... generate a bigger but faster executable. Use --no-bundled on other platforms
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('plateform', help="choose a plateform. Supported values are : " + ", ".join(ACTIVE_PLATEFORM))
-    parser.add_argument('bundled', help="Bundled binary, True / False (default is True)", nargs="?", const=True, type=bool)
+    parser.add_argument('--bundled', action=argparse.BooleanOptionalAction)
     args = parser.parse_args()
 
     myApp = CreateApp(plateform=args.plateform, bundled=args.bundled)
