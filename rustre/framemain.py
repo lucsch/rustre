@@ -5,6 +5,7 @@ import wx
 from rustre.xlsxmerge import XlsxMerge
 from rustre.xlsxcompare import XlsxCompare
 from rustre.xlsxduplicate import XlsxDuplicate
+from rustre.xlsxduplicate import XlsxAutoClean
 from rustre.xlsxjoin import XlsxJoin
 from rustre.version import COMMIT_ID
 from rustre.version import COMMIT_NUMBER
@@ -33,6 +34,8 @@ class FrameMain(wx.Frame):  # pragma: no cover
         self.Bind(wx.EVT_BUTTON, self.on_button_merge, id=self.m_btn_do_merge.GetId())
         self.Bind(wx.EVT_BUTTON, self.on_button_compare, id=self.m_btn_compare.GetId())
         self.Bind(wx.EVT_BUTTON, self.on_button_duplicates, id=self.m_btn_duplicates.GetId())
+        self.Bind(wx.EVT_BUTTON, self.on_button_autoclean_duplicates, id=self.m_btn_autoclean.GetId())
+        self.Bind(wx.EVT_BUTTON, self.on_button_load_columns, id=self.m_btn_load_columns.GetId())
         self.Bind(wx.EVT_BUTTON, self.on_button_join, id=self.m_btn_join.GetId())
         self.Bind(wx.EVT_MENU, self.on_menu_exit, id=self.m_menu_item_exit.GetId())
         self.Bind(wx.EVT_MENU, self.on_menu_about, id=self.m_menu_item_about.GetId())
@@ -70,20 +73,60 @@ class FrameMain(wx.Frame):  # pragma: no cover
             return
         wx.LogMessage("Merging done!")
 
-    def on_button_duplicates(self, event):
-        # get cols
+    def _check_panel_duplicate(self) -> bool:
+        if not os.path.exists(self.m_ctrl_src_file_dup.GetPath()):
+            wx.LogError("Source file doesn't exists or empty!")
+            return False
+
         cols_str = self.m_ctrl_columns_list_dup.GetValue()
         if cols_str == "":
             wx.LogError("Error, no columns defined!")
+            return False
+        return True
+
+    def on_button_duplicates(self, event):
+        if not self._check_panel_duplicate():
             return
-        col_arr = cols_str.split(",")
+
+        # header index for XlsxDuplicate should start at 1
+        # but it's not the case for XlsxAutoClean
+        head_index = self.m_ctrl_header_index_dup.GetValue() + 1
+
+        col_arr = self.m_ctrl_columns_list_dup.GetValue().split(",")
         xdup = XlsxDuplicate(self.m_ctrl_src_file_dup.GetPath(), self.m_ctrl_log_file_dup.GetPath(),
                              col_arr, self.m_ctrl_sheet_index_dup.GetValue(),
-                             self.m_ctrl_header_index_dup.GetValue())
+                             head_index)
         if not xdup.check_duplicate():
             wx.LogError("Error checking duplicates... check your data!")
             return
         wx.LogMessage("Checking duplicate done!")
+
+    def on_button_autoclean_duplicates(self, event):
+        if not self._check_panel_duplicate():
+            return
+
+        if self.m_ctrl_cleaned_filename.GetPath() == "":
+            wx.LogError("Error, cleaned file name not defined!")
+            return
+
+        col_arr = self.m_ctrl_columns_list_dup.GetValue().split(",")
+        xclean = XlsxAutoClean(self.m_ctrl_src_file_dup.GetPath(), col_arr, self.m_ctrl_sheet_index_dup.GetValue(),
+                               self.m_ctrl_header_index_dup.GetValue())
+        xclean.clean(self.m_ctrl_cleaned_filename.GetPath(), self.m_ctrl_list_columns_autoclean.GetStringSelection(),
+                     self.m_ctrl_order_ascending.GetValue())
+        wx.LogMessage("Cleaning duplicate done!")
+
+    def on_button_load_columns(self, event):
+        if not os.path.exists(self.m_ctrl_src_file_dup.GetPath()):
+            wx.LogError("Source file doesn't exists or empty!")
+            return
+
+        xautoclean = XlsxAutoClean(self.m_ctrl_src_file_dup.GetPath(), cols=[0])
+        cols_name = xautoclean.get_columns_names()
+        if cols_name is None or len(cols_name) == 0:
+            wx.LogError("Error loading columns... check your data!")
+            return
+        self.m_ctrl_list_columns_autoclean.Set(cols_name)
 
     def _check_join_panel(self) -> bool:
         if self.m_ctrl_join_file1.GetPath() == "" or not os.path.exists(self.m_ctrl_join_file1.GetPath()):
@@ -291,14 +334,14 @@ class FrameMain(wx.Frame):  # pragma: no cover
                                                   wx.DefaultPosition, wx.DefaultSize, wx.SP_ARROW_KEYS, 0, 10, 0)
         fgSizer41.Add(self.m_ctrl_sheet_index_dup, 0, wx.ALL | wx.EXPAND, 5)
 
-        self.m_staticText10 = wx.StaticText(sbSizer6.GetStaticBox(), wx.ID_ANY, u"header index (start at 1):",
+        self.m_staticText10 = wx.StaticText(sbSizer6.GetStaticBox(), wx.ID_ANY, u"header index (start at 0):",
                                             wx.DefaultPosition, wx.DefaultSize, 0)
         self.m_staticText10.Wrap(-1)
 
         fgSizer41.Add(self.m_staticText10, 0, wx.ALL | wx.ALIGN_CENTER_VERTICAL, 5)
 
         self.m_ctrl_header_index_dup = wx.SpinCtrl(sbSizer6.GetStaticBox(), wx.ID_ANY, wx.EmptyString,
-                                                   wx.DefaultPosition, wx.DefaultSize, wx.SP_ARROW_KEYS, 1, 100, 1)
+                                                   wx.DefaultPosition, wx.DefaultSize, wx.SP_ARROW_KEYS, 0, 100, 0)
         fgSizer41.Add(self.m_ctrl_header_index_dup, 0, wx.ALL | wx.EXPAND, 5)
 
         self.m_staticText11 = wx.StaticText(sbSizer6.GetStaticBox(), wx.ID_ANY, u"Columns:", wx.DefaultPosition,

@@ -94,20 +94,20 @@ class XlsxAutoClean:
         """
         return self.df.columns.tolist()
 
-    def clean(self, order_column_index: int, out_filename: str, ascending: bool = True) -> bool:
+    def clean(self, out_filename: str, order_column_name: str, ascending: bool = True) -> bool:
         """
         Clean the DataFrame by sorting it based on the specified column index and removing duplicate rows.
 
         Args:
-            order_column_index (int): The index of the column to use for sorting.
+            order_column_name (str): The name of the column to use for sorting.
             out_filename (str): The name of the output file to save the cleaned DataFrame to.
             ascending (bool, optional): Whether to sort in ascending order. Defaults to True.
 
         Returns:
             bool: True if the DataFrame was cleaned and saved successfully, False otherwise.
         """
-        if order_column_index != -1:
-            self.df = self.df.sort_values(by=self.df.columns[order_column_index])
+        if order_column_name is not None:
+            self.df = self.df.sort_values(by=order_column_name)
         keep_rule = 'first' if ascending else 'last'
         column_names = [self.df.columns[i] for i in self.m_cols]
         self.df.drop_duplicates(subset=column_names, keep=keep_rule, inplace=True)
