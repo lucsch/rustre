@@ -40,6 +40,7 @@ class FrameMain(wx.Frame):  # pragma: no cover
         self.Bind(wx.EVT_MENU, self.on_menu_exit, id=self.m_menu_item_exit.GetId())
         self.Bind(wx.EVT_MENU, self.on_menu_about, id=self.m_menu_item_about.GetId())
         self.Bind(wx.EVT_MENU, self.on_menu_documentation, id=self.m_menu_item_doc.GetId())
+        self.Bind(wx.EVT_BUTTON, self.on_button_context_help, id=wx.ID_HELP)
 
     def on_button_paste(self, event):
         if not wx.TheClipboard.IsOpened():
@@ -197,6 +198,20 @@ class FrameMain(wx.Frame):  # pragma: no cover
     def on_menu_documentation(self, event):
         wx.LaunchDefaultBrowser("https://rustre.readthedocs.io")
 
+    def on_button_context_help(self, event):
+        selected_panel = self.m_ctrl_notebook.GetSelection()
+        # List of URLs
+        urls = [
+            "https://rustre.readthedocs.io/en/latest/union.html",
+            "https://rustre.readthedocs.io/en/latest/duplicate.html",
+            "https://rustre.readthedocs.io/en/latest/people.html",
+            "https://rustre.readthedocs.io/en/latest/join.html"
+        ]
+        if 0 <= selected_panel < len(urls):
+            wx.LaunchDefaultBrowser(urls[selected_panel])
+        else:
+            wx.LaunchDefaultBrowser("https://rustre.readthedocs.io/en/latest")
+
     def _create_statusbar(self):
         self.CreateStatusBar()
         self.SetStatusBarPane(-1)  # don't display menu hints
@@ -295,13 +310,22 @@ class FrameMain(wx.Frame):  # pragma: no cover
 
         bSizer3.Add(sbSizer3, 0, wx.EXPAND | wx.ALL, 5)
 
+        bSizer11 = wx.BoxSizer(wx.HORIZONTAL)
+
         self.m_btn_do_merge = wx.Button(self.m_page_merge, wx.ID_ANY, u"Merge", wx.DefaultPosition, wx.DefaultSize, 0)
-        bSizer3.Add(self.m_btn_do_merge, 0, wx.ALL, 5)
+        bSizer11.Add(self.m_btn_do_merge, 0, wx.ALL, 5)
+
+        bSizer11.Add((0, 0), 1, wx.EXPAND, 5)
+
+        self.m_btn_help_union = wx.Button(self.m_page_merge, wx.ID_HELP, u"Help", wx.DefaultPosition, wx.DefaultSize, 0)
+        bSizer11.Add(self.m_btn_help_union, 0, wx.ALL, 5)
+
+        bSizer3.Add(bSizer11, 0, wx.EXPAND, 5)
 
         self.m_page_merge.SetSizer(bSizer3)
         self.m_page_merge.Layout()
         bSizer3.Fit(self.m_page_merge)
-        self.m_ctrl_notebook.AddPage(self.m_page_merge, u"Union", False)
+        self.m_ctrl_notebook.AddPage(self.m_page_merge, u"Union", True)
         self.m_page_duplicate = wx.Panel(self.m_ctrl_notebook, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize,
                                          wx.TAB_TRAVERSAL)
         bSizer7 = wx.BoxSizer(wx.VERTICAL)
@@ -447,6 +471,12 @@ class FrameMain(wx.Frame):  # pragma: no cover
                                          wx.DefaultSize, 0)
         bSizer10.Add(self.m_btn_autoclean, 0, wx.ALL, 5)
 
+        bSizer10.Add((0, 0), 1, wx.EXPAND, 5)
+
+        self.m_btn_help_duplicate = wx.Button(self.m_page_duplicate, wx.ID_HELP, u"Help", wx.DefaultPosition,
+                                              wx.DefaultSize, 0)
+        bSizer10.Add(self.m_btn_help_duplicate, 0, wx.ALL, 5)
+
         bSizer7.Add(bSizer10, 0, wx.EXPAND, 5)
 
         self.m_page_duplicate.SetSizer(bSizer7)
@@ -519,14 +549,24 @@ class FrameMain(wx.Frame):  # pragma: no cover
 
         bSizer17.Add(sbSizer11, 1, wx.EXPAND | wx.ALL, 5)
 
+        bSizer12 = wx.BoxSizer(wx.HORIZONTAL)
+
         self.m_btn_compare = wx.Button(self.m_page_compare, wx.ID_ANY, u"Compare", wx.DefaultPosition, wx.DefaultSize,
                                        0)
-        bSizer17.Add(self.m_btn_compare, 0, wx.ALL, 5)
+        bSizer12.Add(self.m_btn_compare, 0, wx.ALL, 5)
+
+        bSizer12.Add((0, 0), 1, wx.EXPAND, 5)
+
+        self.m_btn_help_people = wx.Button(self.m_page_compare, wx.ID_HELP, u"Help", wx.DefaultPosition, wx.DefaultSize,
+                                           0)
+        bSizer12.Add(self.m_btn_help_people, 0, wx.ALL, 5)
+
+        bSizer17.Add(bSizer12, 0, wx.EXPAND, 5)
 
         self.m_page_compare.SetSizer(bSizer17)
         self.m_page_compare.Layout()
         bSizer17.Fit(self.m_page_compare)
-        self.m_ctrl_notebook.AddPage(self.m_page_compare, u"People", True)
+        self.m_ctrl_notebook.AddPage(self.m_page_compare, u"People", False)
         self.m_page_join = wx.Panel(self.m_ctrl_notebook, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize,
                                     wx.TAB_TRAVERSAL)
         bSizer9 = wx.BoxSizer(wx.VERTICAL)
@@ -657,8 +697,17 @@ class FrameMain(wx.Frame):  # pragma: no cover
 
         bSizer9.Add(sbSizer101, 0, wx.EXPAND | wx.ALL, 5)
 
+        bSizer13 = wx.BoxSizer(wx.HORIZONTAL)
+
         self.m_btn_join = wx.Button(self.m_page_join, wx.ID_ANY, u"Join", wx.DefaultPosition, wx.DefaultSize, 0)
-        bSizer9.Add(self.m_btn_join, 0, wx.ALL, 5)
+        bSizer13.Add(self.m_btn_join, 0, wx.ALL, 5)
+
+        bSizer13.Add((0, 0), 1, wx.EXPAND, 5)
+
+        self.m_btn_help_join = wx.Button(self.m_page_join, wx.ID_HELP, u"Help", wx.DefaultPosition, wx.DefaultSize, 0)
+        bSizer13.Add(self.m_btn_help_join, 0, wx.ALL, 5)
+
+        bSizer9.Add(bSizer13, 0, wx.EXPAND, 5)
 
         self.m_page_join.SetSizer(bSizer9)
         self.m_page_join.Layout()
