@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 import os
+import pandas as pd
 from rustre.xlsxfile import XlsxFile
+
 
 class XlsxDuplicate:
     """
@@ -9,7 +11,8 @@ class XlsxDuplicate:
     :param log_filename:
     :param cols:
     """
-    def __init__(self, src_filename :str, log_filename :str, cols :[], sheet_index=0, header_index=1):
+
+    def __init__(self, src_filename: str, log_filename: str, cols: [], sheet_index=0, header_index=1):
         self.m_src_filename = src_filename
         self.m_log_filename = log_filename
         # convert cols to int
@@ -42,7 +45,7 @@ class XlsxDuplicate:
 
         # iterate
         skip_index = []
-        for row_index in range(self.m_header_index+1, xlsx_src.get_row_count() + 1):
+        for row_index in range(self.m_header_index + 1, xlsx_src.get_row_count() + 1):
             if row_index in skip_index:
                 continue
             row = xlsx_src.get_columns(row_index)
@@ -63,8 +66,50 @@ class XlsxDuplicate:
         xlsx_log.save()
         return True
 
-    def _get_col_id(self, row :[]) -> []:
+    def _get_col_id(self, row: []) -> []:
         return [row[i] for i in self.m_cols]
 
 
+class XlsxAutoClean:
+    """
+    Automatically Clean a xlsx file from duplicates.
+    """
 
+    def __init__(self, src_filename: str, cols: [], sheet_index=0, header_index=0):
+        """
+        Initializes the object with the given source filename, log filename, columns, sheet index, and header index.
+
+        :param src_filename: (str) The source filename.
+        :param cols: (list) The list of columns.
+        :param sheet_index: (int) The index of the sheet. Default is 0.
+        :param header_index: (int) The index of the header. Default is 0.
+        """
+        # convert cols to int
+        self.m_cols = [int(i) for i in cols]
+        self.df = pd.read_excel(src_filename, sheet_name=sheet_index, header=header_index)
+
+    def get_columns_names(self) -> []:
+        """
+        Return a list of column names from the dataframe.
+        """
+        return self.df.columns.tolist()
+
+    def clean(self, order_column_index: int, out_filename: str, ascending: bool = True) -> bool:
+        """
+        Clean the DataFrame by sorting it based on the specified column index and removing duplicate rows.
+
+        Args:
+            order_column_index (int): The index of the column to use for sorting.
+            out_filename (str): The name of the output file to save the cleaned DataFrame to.
+            ascending (bool, optional): Whether to sort in ascending order. Defaults to True.
+
+        Returns:
+            bool: True if the DataFrame was cleaned and saved successfully, False otherwise.
+        """
+        if order_column_index != -1:
+            self.df = self.df.sort_values(by=self.df.columns[order_column_index])
+        keep_rule = 'first' if ascending else 'last'
+        column_names = [self.df.columns[i] for i in self.m_cols]
+        self.df.drop_duplicates(subset=column_names, keep=keep_rule, inplace=True)
+        self.df.to_excel(out_filename, index=False)
+        return True

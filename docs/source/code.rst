@@ -37,6 +37,15 @@ Contains the code to perform the comparison / modification between two xlsx file
    :undoc-members:
    :show-inheritance:
 
+xlsxduplicate
+-------------
+Contains the code to check / remove duplicates in a xlsx file
+
+.. automodule:: rustre.xlsxduplicate
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 
 Modules and index
 ======================
