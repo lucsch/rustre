@@ -3,6 +3,7 @@
 import argparse
 
 import os
+import shutil
 import subprocess
 
 
@@ -42,6 +43,9 @@ def delete_binary(app_path):
         if os.path.isfile(os.path.join(app_path, name)) and not name.startswith("."):
             print("removing : " + name)
             os.remove(os.path.join(app_path, name))
+        if os.path.isdir(os.path.join(app_path, name)) and not name.endswith(".app"):
+            print("removing : " + name)
+            shutil.rmtree(os.path.join(app_path, name))
 
 
 ##########################################################

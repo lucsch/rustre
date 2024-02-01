@@ -1,0 +1,72 @@
+
+name: Build Windows
+
+on:
+  push:
+  release:
+    types: [created]
+
+jobs:
+  build:
+    name: Windows Build
+    runs-on: windows-2022
+
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+    - name: Set up Python 3.10
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.10'
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+
+    - name: Create the version file
+      run: |
+        cd rustre
+        python createversion.py version.py
+        cd ..
+
+    - name: Run test
+      run: |
+        pytest test --log-cli-level=INFO
+
+    - name: Create the binary
+      run: |
+        cd install
+        python createapp.py Windows False
+        cd ..
+
+    - name: Upload
+      uses: actions/upload-artifact@v4
+      with:
+        path: |
+          ${{github.workspace}}/bin/*.exe
+          ${{github.workspace}}/bin/*.zip
+
+  upload_all:
+    name: Upload if release
+    needs: [build]
+    runs-on: ubuntu-22.04
+    if: github.event_name == 'release' && github.event.action == 'created'
+
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: artifact
+          path: dist
+
+      - name: Upload to releases
+        uses: xresloader/upload-to-github-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          file: "dist/*.zip;dist/*.exe"
+          tags: true
+          draft: true
+          verbose: true
