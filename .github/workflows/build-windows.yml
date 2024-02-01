@@ -61,13 +61,15 @@ jobs:
         with:
           name: artifact
           path: dist
+      - name: Display structure of downloaded files
+        run: ls -R
 
       - name: Upload to releases
         uses: xresloader/upload-to-github-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          file: "bin/dist/*.zip;bin/dist/*.exe"
+          file: "bin/dist/*.zip;bin/dist/*.exe;*.exe;bin/*.exe"
           tags: true
           draft: true
           verbose: true
