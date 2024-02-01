@@ -19,11 +19,11 @@ sys.setrecursionlimit(1500)
 # -- Project information -----------------------------------------------------
 
 project = 'RUSTRE'
-copyright = '2022, Lucien'
+copyright = '2024, Lucien'
 author = 'Lucien'
 
 # The full version, including alpha/beta/rc tags
-release = '0.0.1'
+release = '1.2.109'
 
 
 # -- General configuration ---------------------------------------------------
