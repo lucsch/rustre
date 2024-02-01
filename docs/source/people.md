@@ -1,9 +1,28 @@
-# Configuration file
+# People
+
+Rustre also allows to compare two xlsx files, a source file and a destination file. 
+These two files can have different structures.
+
+![](./img/03_gui_people.png)
+
+The program works as follows: each line of the destination file will be read. 
+A unique key will be created (e.g. a mix of name, first name and date of birth). 
+Depending on the content the following operations will be performed:
+
+- addition: the unique key does not exist in the source file and the line in the destination file must be added.
+- modification : the unique key exists in the source file but the content has changed. The source file must be modified to integrate this new content.
+- ignore : some lines in the destination file can be ignored.
+
+All these operations are configurable with a configuration file (.ini).
+
+The ini file structure is described bellow
+
+## Configuration file
 
 To work, "RUSTRE" needs a configuration file (*.ini file) describing the data model. 
 The structure of this file is explained below
 
-## Groups
+### Groups
 Two identical groups must be present:
 
 - source `[SOURCE]` describe the xlsx source file structure. 
@@ -13,7 +32,7 @@ Two identical groups must be present:
 The source file is the reference. Only this file can be modified according to the values found in the target file
 :::
 
-## Values
+### Values
 
 For each group, the following values are required:
 
@@ -32,7 +51,7 @@ For each group, the following values are required:
 | col_strip_text     | list   | A list with the column to modify and the number of characters to remove                                     |
 
 
-## Sample
+### Sample
 
 
 An example of a complete configuration file is available bellow (see also `test/data/test_compare2.ini`)
@@ -83,9 +102,3 @@ col_condition =
 col_strip_text =
         5,3
 ```
-
-
-
-
-
-
