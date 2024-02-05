@@ -6,4 +6,8 @@
 
 # RUSTRE
 
-conversion and manipulation of tabular data
+RUSTRE is an open-source software for manipulating and merging xlsx documents.
+
+More detailed documentation can be found here: https://rustre.readthedocs.io/
+
+![](./docs/source/img/01_gui_union.png)
